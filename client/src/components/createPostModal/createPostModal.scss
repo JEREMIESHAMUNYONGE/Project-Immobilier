@@ -1,0 +1,205 @@
+.createPostModal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #000;
+
+  .modalOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+  }
+
+  // Match dashboard style for Cloudinary upload button
+  .cloudinary-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    cursor: pointer;
+    transition: all .2s ease;
+    box-shadow: none !important;
+    position: relative;
+
+    &::before {
+      content: "+";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      background: #111827;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    &:hover { background: #f5f5f5 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.08) !important; }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0,0,0,.1) !important; }
+  }
+
+  .modalContent {
+    position: relative;
+    width: 90vw;
+    max-width: 900px;
+    max-height: 92vh;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #eaeaea;
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    line-height: 1;
+    transition: all .2s ease;
+
+    &:hover { background: #f5f5f5; }
+  }
+
+  .header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #eaeaea;
+
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+
+  .body {
+    padding: 22px;
+    overflow: auto;
+  }
+
+  .formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .formLeft, .formRight {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .mediaBlock {
+    margin-top: 8px;
+  }
+
+  .coords {
+    margin-top: 6px;
+  }
+
+  .twoCols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    input, select {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+
+      &:focus {
+        border-color: #111;
+        box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+      }
+    }
+
+    &.description {
+      .ql-container {
+        border-radius: 10px;
+      }
+      // add extra space after description block
+      margin-bottom: 24px;
+    }
+  }
+
+  .imagesPreview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #eaeaea;
+    }
+  }
+
+  .actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all .2s ease;
+
+      &:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+    }
+
+    .cancelBtn { background: #fff; }
+    .submitBtn { background: #000; color: #fff; border-color: #000; }
+  }
+
+  .error { color: #ef4444; font-size: 13px; margin-top: 6px; }
+}

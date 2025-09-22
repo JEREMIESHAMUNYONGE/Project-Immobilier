@@ -1,55 +1,193 @@
 .profileUpdatePage {
-  height: 100%;
+  width: 100%;
+  padding: 24px;
+  background: #fafafa;
   display: flex;
+  align-items: flex-start;
+  justify-content: center;
 
-  .formContainer {
-    flex:3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+  .card {
+    width: 100%;
+    max-width: 1000px;
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
-      .item {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
+    .cardBody {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      padding: 24px;
 
-        label {
-        }
+      .leftPanel {
+        .updateForm {
+          .formHeader {
+            margin-bottom: 20px;
 
-        input {
-          padding: 20px;
-          border-radius: 5px;
-          border: 1px solid gray;
+            h1 {
+              margin: 0 0 6px 0;
+              font-size: 24px;
+              font-weight: 700;
+              color: #000000;
+            }
+
+            p {
+              margin: 0;
+              color: #666666;
+              font-size: 14px;
+            }
+          }
+
+          .formGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+
+            .formGroup {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+
+              &.fullWidth {
+                grid-column: 1 / -1;
+              }
+
+              label {
+                font-size: 14px;
+                font-weight: 500;
+                color: #000000;
+              }
+
+              input {
+                padding: 12px 14px;
+                border: 1px solid #eaeaea;
+                border-radius: 8px;
+                background: #ffffff;
+                font-size: 14px;
+                color: #111827;
+                transition: all 0.2s ease;
+
+                &::placeholder {
+                  color: #9ca3af;
+                }
+
+                &:focus {
+                  outline: none;
+                  border-color: #000000;
+                  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+                }
+              }
+            }
+          }
+
+          .errorAlert {
+            margin-top: 8px;
+            padding: 12px 14px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+            border-radius: 8px;
+            font-size: 14px;
+          }
+
+          .formActions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+
+            .submitButton {
+              padding: 12px 20px;
+              background: #000000;
+              color: #ffffff;
+              border: none;
+              border-radius: 8px;
+              font-size: 14px;
+              font-weight: 600;
+              cursor: pointer;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              transition: all 0.2s ease;
+
+              &:hover {
+                background: #333333;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+              }
+            }
+          }
         }
       }
-      button {
-        padding: 20px;
-        border-radius: 5px;
-        border: none;
-        background-color: teal;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
+
+      .rightPanel {
+        .avatarCard {
+          background: #fafafa;
+          border: 1px solid #eaeaea;
+          border-radius: 12px;
+          padding: 16px;
+
+          .avatarPreview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            margin-bottom: 12px;
+
+            .avatar {
+              width: 160px;
+              height: 160px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 2px solid #eaeaea;
+            }
+          }
+
+          .avatarActions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+
+            .cloudinary-button {
+              padding: 10px 16px;
+              background: #000000 !important;
+              color: #ffffff !important;
+              border: none !important;
+              border-radius: 8px !important;
+              font-size: 14px !important;
+              font-weight: 600;
+              cursor: pointer;
+              text-align: center;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              transition: all 0.2s ease;
+
+              &:hover {
+                background: #333333 !important;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+              }
+            }
+
+            .helperText {
+              font-size: 12px;
+              color: #6b7280;
+              text-align: center;
+            }
+          }
+        }
       }
     }
   }
+}
 
-  .sideContainer {
-    flex: 2;
-    background-color: #fcf5f3;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-
-    .avatar{
-      width: 50%;
-      object-fit: cover;
+@media (max-width: 900px) {
+  .profileUpdatePage {
+    .card {
+      .cardBody {
+        grid-template-columns: 1fr;
+      }
     }
   }
 }

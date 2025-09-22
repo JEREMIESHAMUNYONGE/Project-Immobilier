@@ -1,20 +1,49 @@
 @import "../../responsive.scss";
 
 nav {
-  height: 100px;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid #eaeaea;
+  padding: 0 32px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
 
   a {
-    transition: all 0.4s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: #666666;
+    font-weight: 500;
+    position: relative;
 
     @include sm {
       display: none;
     }
 
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      transition: width 0.3s ease;
+    }
+
     &:hover {
-      scale: 1.05;
+      color: #000000;
+      transform: translateY(-1px);
+
+      &::after {
+        width: 100%;
+      }
     }
   }
 
@@ -25,14 +54,40 @@ nav {
     gap: 50px;
 
     .logo {
-      font-weight: bold;
-      font-size: 20px;
+      font-weight: 800;
+      font-size: 22px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: #000000;
+      text-decoration: none;
+      transition: all 0.3s ease;
 
-      img {
-        width: 28px;
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      .logoIcon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f5f5f5 0%, #eaeaea 100%);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+          background: linear-gradient(135deg, #eaeaea 0%, #d4d4d4 100%);
+          transform: rotate(5deg);
+        }
+
+        img {
+          width: 24px;
+          height: 24px;
+          transition: transform 0.3s ease;
+        }
       }
 
       span {
@@ -46,54 +101,124 @@ nav {
       }
     }
   }
+
   .right {
     flex: 2;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background-color: #fcf5f3;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
     height: 100%;
+    padding: 0 32px;
+    border-radius: 0 0 0 20px;
 
     @include md {
-      background-color: transparent;
+      background: transparent;
+      padding: 0;
     }
 
     a {
-      padding: 12px 24px;
-      margin: 20px;
-    }
+      padding: 12px 20px;
+      margin: 0 8px;
+      border-radius: 10px;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
 
-    .user{
-      display: flex;
-      align-items: center;
-      font-weight: bold;
-
-      img{
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 20px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+        transition: left 0.5s ease;
       }
 
-      span{
-        @include sm{
+      &:hover::before {
+        left: 100%;
+      }
+
+      &:hover {
+        background: #f0f0f0;
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+
+      img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 16px;
+        border: 3px solid #eaeaea;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+          border-color: #000000;
+          transform: scale(1.1) rotate(5deg);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      span {
+        @include sm {
           display: none;
         }
       }
 
-      .profile{
-        padding: 12px 24px;
-        background-color: #fece51;
+      .profile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        color: #ffffff;
         cursor: pointer;
         border: none;
+        border-radius: 12px;
         position: relative;
-        
-        .notification{
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s ease;
+        }
+
+        &:hover::before {
+          left: 100%;
+        }
+
+        &:hover {
+          background: linear-gradient(135deg, #333333 0%, #555555 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification {
           position: absolute;
           top: -8px;
           right: -8px;
-          background-color: red;
+          background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
           color: white;
           border-radius: 50%;
           width: 26px;
@@ -101,13 +226,27 @@ nav {
           display: flex;
           align-items: center;
           justify-content: center;
+          font-size: 12px;
+          font-weight: 700;
+          box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+          animation: pulse 2s infinite;
         }
-
       }
     }
 
     .register {
-      background-color: #fece51;
+      background: linear-gradient(135deg, #000000 0%, #333333 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: linear-gradient(135deg, #333333 0%, #555555 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      }
     }
 
     .menuIcon {
@@ -115,9 +254,14 @@ nav {
       z-index: 999;
 
       img {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          transform: scale(1.1) rotate(90deg);
+        }
       }
 
       @include sm {
@@ -129,16 +273,18 @@ nav {
       position: absolute;
       top: 0;
       right: -50%;
-      background-color: black;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(51, 51, 51, 0.95) 100%);
+      backdrop-filter: blur(20px);
       color: white;
       height: 100vh;
       width: 50%;
-      transition: all 1s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 20px;
+      z-index: 998;
 
       &.active {
         right: 0;
@@ -147,8 +293,31 @@ nav {
       @include sm {
         a {
           display: initial;
+          padding: 16px 24px;
+          border-radius: 12px;
+          margin: 8px 0;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(8px);
+          }
         }
       }
     }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }

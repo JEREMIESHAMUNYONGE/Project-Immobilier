@@ -5,49 +5,78 @@ function Slider({ images }) {
   const [imageIndex, setImageIndex] = useState(null);
 
   const changeSlide = (direction) => {
+    if (!images || images.length === 0) return;
+    
     if (direction === "left") {
-      if (imageIndex === 0) {
-        setImageIndex(images.length - 1);
-      } else {
-        setImageIndex(imageIndex - 1);
-      }
+      setImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1);
     } else {
-      if (imageIndex === images.length - 1) {
-        setImageIndex(0);
-      } else {
-        setImageIndex(imageIndex + 1);
-      }
+      setImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
     }
   };
 
+  const openFullscreen = (index) => {
+    setImageIndex(index);
+  };
+
+  const closeFullscreen = () => {
+    setImageIndex(null);
+  };
+
+  // Si pas d'images
+  if (!images || images.length === 0) {
+    return (
+      <div className="slider no-images">
+        <div className="placeholder">
+          <span className="placeholder-icon">📷</span>
+          <p>Aucune image disponible</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="slider">
+      {/* Mode plein écran */}
       {imageIndex !== null && (
         <div className="fullSlider">
-          <div className="arrow" onClick={() => changeSlide("left")}>
-            <img src="/arrow.png" alt="" />
+          <div className="arrow left" onClick={() => changeSlide("left")}>
+            <img src="/arrow.png" alt="Image précédente" />
           </div>
+          
           <div className="imgContainer">
-            <img src={images[imageIndex]} alt="" />
+            <img 
+              src={images[imageIndex]} 
+              alt={`Image ${imageIndex + 1}`}
+            />
           </div>
-          <div className="arrow" onClick={() => changeSlide("right")}>
-            <img src="/arrow.png" className="right" alt="" />
+          
+          <div className="arrow right" onClick={() => changeSlide("right")}>
+            <img src="/arrow.png" alt="Image suivante" />
           </div>
-          <div className="close" onClick={() => setImageIndex(null)}>
-            X
-          </div>
+          
+          <button className="close" onClick={closeFullscreen} aria-label="Fermer">
+            ✕
+          </button>
         </div>
       )}
+
+      {/* Image principale */}
       <div className="bigImage">
-        <img src={images[0]} alt="" onClick={() => setImageIndex(0)} />
+        <img 
+          src={images[0]} 
+          alt="Image principale"
+          onClick={() => openFullscreen(0)} 
+        />
       </div>
+
+      {/* Miniatures */}
       <div className="smallImages">
         {images.slice(1).map((image, index) => (
           <img
-            src={image}
-            alt=""
             key={index}
-            onClick={() => setImageIndex(index + 1)}
+            src={image}
+            alt={`Miniature ${index + 2}`}
+            onClick={() => openFullscreen(index + 1)}
           />
         ))}
       </div>

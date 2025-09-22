@@ -5,95 +5,179 @@
   height: 350px;
   display: flex;
   gap: 20px;
+  position: relative;
 
   @include sm {
     height: 280px;
+    gap: 15px;
   }
 
+  // Placeholder quand pas d'images
+  &.no-images {
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .placeholder {
+      text-align: center;
+      color: #6c757d;
+      
+      .placeholder-icon {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 10px;
+        opacity: 0.6;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Mode plein écran
   .fullSlider {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
+    position: fixed;
     top: 0;
     left: 0;
-    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 9999;
+    padding: 0 50px;
+
+    @include sm {
+      padding: 0 20px;
+    }
 
     .arrow {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      
+      &:hover {
+        opacity: 0.8;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+        filter: brightness(0) invert(1);
+
+        @include md {
+          width: 40px;
+          height: 40px;
+        }
+
+        @include sm {
+          width: 30px;
+          height: 30px;
+        }
+      }
+
+      &.right img {
+        transform: rotate(180deg);
+      }
+    }
+
+    .imgContainer {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      max-width: calc(100vw - 200px);
 
-      img {
-        width: 50px;
-
-        @include md {
-          width: 30px;
-        }
-
-        @include sm {
-          width: 20px;
-        }
-
-        &.right {
-          transform: rotate(180deg);
-        }
+      @include sm {
+        max-width: calc(100vw - 100px);
       }
-    }
-    .imgContainer {
-      flex: 10;
 
       img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       }
     }
 
     .close {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
       color: white;
-      font-size: 36px;
+      font-size: 24px;
       font-weight: bold;
-      padding: 50px;
+      padding: 10px 15px;
+      border-radius: 50%;
       cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      @include sm {
+        top: 15px;
+        right: 15px;
+        font-size: 20px;
+        padding: 8px 12px;
+      }
     }
   }
 
+  // Images principales
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
   }
 
   .bigImage {
     flex: 3;
+    border-radius: 10px;
+    overflow: hidden;
 
     @include sm {
       flex: 2;
     }
   }
+
   .smallImages {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 20px;
+    gap: 15px;
 
     @include sm {
-      flex: 1;
+      gap: 10px;
     }
 
     img {
       height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
 
       @include sm {
         height: 80px;

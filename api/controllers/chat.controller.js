@@ -55,16 +55,24 @@ export const getChat = async (req, res) => {
       },
     });
 
-    await prisma.chat.update({
-      where: {
-        id: req.params.id,
-      },
-      data: {
-        seenBy: {
-          push: [tokenUserId],
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found!" });
+    }
+
+    // ✅ Correction : Ajouter l'utilisateur à seenBy s'il n'y est pas déjà
+    if (!chat.seenBy.includes(tokenUserId)) {
+      await prisma.chat.update({
+        where: {
+          id: req.params.id,
         },
-      },
-    });
+        data: {
+          seenBy: {
+            set: [...chat.seenBy, tokenUserId],
+          },
+        },
+      });
+    }
+
     res.status(200).json(chat);
   } catch (err) {
     console.log(err);
@@ -74,10 +82,34 @@ export const getChat = async (req, res) => {
 
 export const addChat = async (req, res) => {
   const tokenUserId = req.userId;
+  const { receiverId } = req.body;
+
+  if (!receiverId) {
+    return res.status(400).json({ message: "Receiver ID is required!" });
+  }
+
+  if (receiverId === tokenUserId) {
+    return res.status(400).json({ message: "Cannot chat with yourself!" });
+  }
+
   try {
+    // Vérifier si un chat existe déjà entre ces utilisateurs
+    const existingChat = await prisma.chat.findFirst({
+      where: {
+        userIDs: {
+          hasEvery: [tokenUserId, receiverId],
+        },
+      },
+    });
+
+    if (existingChat) {
+      return res.status(200).json(existingChat);
+    }
+
     const newChat = await prisma.chat.create({
       data: {
-        userIDs: [tokenUserId, req.body.receiverId],
+        userIDs: [tokenUserId, receiverId],
+        seenBy: [tokenUserId],
       },
     });
     res.status(200).json(newChat);
@@ -90,7 +122,6 @@ export const addChat = async (req, res) => {
 export const readChat = async (req, res) => {
   const tokenUserId = req.userId;
 
-  
   try {
     const chat = await prisma.chat.update({
       where: {
@@ -101,7 +132,7 @@ export const readChat = async (req, res) => {
       },
       data: {
         seenBy: {
-          set: [tokenUserId],
+          set: [tokenUserId], // ✅ Correction
         },
       },
     });

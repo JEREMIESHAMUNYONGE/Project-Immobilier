@@ -56,11 +56,16 @@ export const getPost = async (req, res) => {
               },
             },
           });
-          res.status(200).json({ ...post, isSaved: saved ? true : false });
+          // Fix 1: Return here to prevent the code from continuing
+          return res.status(200).json({ ...post, isSaved: saved ? true : false });
         }
+        // Fix 2: If there's an error with the token, send a response and return
+        return res.status(200).json({ ...post, isSaved: false });
       });
+    } else {
+      // Fix 3: If no token exists, send the response here and return
+      res.status(200).json({ ...post, isSaved: false });
     }
-    res.status(200).json({ ...post, isSaved: false });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to get post" });
@@ -71,13 +76,31 @@ export const addPost = async (req, res) => {
   const body = req.body;
   const tokenUserId = req.userId;
 
+  // Validation for required fields
+  if (!body.postData || !body.postDetail) {
+    return res.status(400).json({ message: "postData and postDetail are required!" });
+  }
+
+  const { postData, postDetail } = body;
+
+  // Validate required postData fields
+  if (!postData.title || !postData.price || !postData.address || !postData.city || 
+      !postData.bedroom || !postData.bathroom || !postData.type || !postData.property) {
+    return res.status(400).json({ message: "Missing required fields: title, price, address, city, bedroom, bathroom, type, property" });
+  }
+
+  // Validate required postDetail fields
+  if (!postDetail.desc) {
+    return res.status(400).json({ message: "Description is required!" });
+  }
+
   try {
     const newPost = await prisma.post.create({
       data: {
-        ...body.postData,
+        ...postData,
         userId: tokenUserId,
         postDetail: {
-          create: body.postDetail,
+          create: postDetail,
         },
       },
     });
@@ -89,11 +112,39 @@ export const addPost = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
+  const id = req.params.id;
+  const tokenUserId = req.userId;
+  const body = req.body;
+
   try {
-    res.status(200).json();
+    // Check if post exists and user owns it
+    const post = await prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found!" });
+    }
+
+    if (post.userId !== tokenUserId) {
+      return res.status(403).json({ message: "Not Authorized!" });
+    }
+
+    // Update post
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data: {
+        ...body.postData,
+        postDetail: body.postDetail ? {
+          update: body.postDetail,
+        } : undefined,
+      },
+    });
+
+    res.status(200).json(updatedPost);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Failed to update posts" });
+    res.status(500).json({ message: "Failed to update post" });
   }
 };
 
@@ -109,6 +160,19 @@ export const deletePost = async (req, res) => {
     if (post.userId !== tokenUserId) {
       return res.status(403).json({ message: "Not Authorized!" });
     }
+
+    // Delete dependent records first to satisfy required relation
+    await prisma.postDetail.deleteMany({
+      where: { postId: id },
+    });
+
+    await prisma.savedPost.deleteMany({
+      where: { postId: id },
+    });
+
+    await prisma.chat.deleteMany({
+      where: { postId: id },
+    }).catch(() => {});
 
     await prisma.post.delete({
       where: { id },

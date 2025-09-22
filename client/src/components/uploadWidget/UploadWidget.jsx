@@ -1,10 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 
 // Create a context to manage the script loading state
 const CloudinaryScriptContext = createContext();
 
-function UploadWidget({ uwConfig, setPublicId, setState }) {
+function UploadWidget({ uwConfig, setPublicId, setState, label = "Upload" }) {
   const [loaded, setLoaded] = useState(false);
+  const widgetRef = useRef(null);
 
   useEffect(() => {
     // Check if the script is already loaded
@@ -25,36 +26,34 @@ function UploadWidget({ uwConfig, setPublicId, setState }) {
     }
   }, [loaded]);
 
-  const initializeCloudinaryWidget = () => {
-    if (loaded) {
-      var myWidget = window.cloudinary.createUploadWidget(
+  const openWidget = () => {
+    if (!loaded || !window.cloudinary) return;
+    if (!widgetRef.current) {
+      widgetRef.current = window.cloudinary.createUploadWidget(
         uwConfig,
         (error, result) => {
           if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
+            // Append the uploaded image URL to state
             setState((prev) => [...prev, result.info.secure_url]);
+            if (setPublicId) setPublicId(result.info.public_id);
           }
         }
       );
-
-      document.getElementById("upload_widget").addEventListener(
-        "click",
-        function () {
-          myWidget.open();
-        },
-        false
-      );
     }
+    widgetRef.current.open();
   };
 
   return (
     <CloudinaryScriptContext.Provider value={{ loaded }}>
       <button
-        id="upload_widget"
+        type="button"
         className="cloudinary-button"
-        onClick={initializeCloudinaryWidget}
+        onClick={openWidget}
+        disabled={!loaded}
+        aria-busy={!loaded}
+        title={loaded ? label : "Chargement du module d'upload..."}
       >
-        Upload
+        {loaded ? label : "Chargement..."}
       </button>
     </CloudinaryScriptContext.Provider>
   );

@@ -1,0 +1,726 @@
+.postDetailModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #000000;
+}
+
+/* Confirmation overlay for deletion */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* above modalContent */
+
+  .confirmCard {
+    width: 92vw;
+    max-width: 420px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    padding: 20px;
+
+    .confirmHeader {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+
+      .confirmIcon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: #fee2e2;
+        color: #b91c1c;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+      }
+    }
+
+    .confirmText {
+      margin: 0 0 16px 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .confirmActions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all .2s ease;
+      }
+
+      .lightBtn {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        color: #111827;
+
+        &:hover { background: #f5f5f5; }
+      }
+
+      .dangerBtn {
+        background: #ef4444;
+        border: 1px solid #ef4444;
+        color: #fff;
+
+        &:hover { background: #dc2626; border-color: #dc2626; }
+      }
+    }
+  }
+}
+
+.modalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.modalContent {
+  position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 1400px;
+  overflow-y: auto;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+  font-weight: 700;
+  color: #666666;
+
+  &:hover {
+    background: #eaeaea;
+    transform: translateY(-1px);
+  }
+}
+
+// Section slider avec padding
+.sliderSection {
+  width: 100%;
+  height: 400px;
+  padding: 20px 20px 0 20px;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+// Section contenu en deux colonnes
+.contentSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 30px;
+  min-height: 500px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Colonne gauche
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  // Media panel (Slider) when layout is split
+  .media {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 24px;
+
+    // Ensure a comfortable viewing height
+    .slider,
+    .sliderContainer,
+    & > div {
+      width: 100%;
+      height: 380px;
+    }
+
+    // Decorative subtle overlay edges for style
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(0,0,0,0.06), rgba(0,0,0,0) 30%);
+      mix-blend-mode: normal;
+    }
+
+    // Ensure images are centered within the available height
+    img {
+      object-position: center center;
+    }
+  }
+
+  // Card under the image to host Description and Nearby, styled as dashboard cards
+  .mediaInfo {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    // Summary: Owner + Commune/Price cards side by side
+    .summaryRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      .ownerCard,
+      .infoCard {
+        background: #ffffff;
+        border: 1px solid #eaeaea;
+        border-radius: 12px;
+        padding: 14px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .ownerCard {
+        .userInfo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #eaeaea;
+          }
+
+          .userDetails {
+            display: flex;
+            flex-direction: column;
+            .username { font-weight: 600; color: #111827; font-size: 15px; }
+            .userLabel { color: #6b7280; font-size: 12px; }
+          }
+        }
+      }
+
+      .infoCard {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 90px;
+
+        .commune {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #6b7280;
+          font-size: 14px;
+
+          img { width: 18px; height: 18px; }
+        }
+
+        .price {
+          margin-top: 10px;
+          font-size: 22px;
+          font-weight: 700;
+          color: #000000;
+        }
+      }
+    }
+
+    .description,
+    .nearbySection {
+      background: #ffffff;
+      border: 1px solid #eaeaea;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #000000;
+        margin: 0 0 12px 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #eaeaea;
+      }
+    }
+
+    .description {
+      .descriptionContent {
+        line-height: 1.65;
+        color: #4b5563;
+        font-size: 15px;
+      }
+    }
+
+    // Keep description card here; Nearby is now in right column and styled there
+  }
+}
+
+// Colonne droite
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .header {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eaeaea;
+
+    .title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #000000;
+      margin: 0 0 6px 0;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      background-image: linear-gradient(transparent 70%, #f5f5f5 0);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 800;
+      color: #000000;
+      margin: 0;
+    }
+  }
+
+  .address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 16px;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .userDetails {
+      display: flex;
+      flex-direction: column;
+
+      .username {
+        font-weight: 600;
+        color: #111827;
+        font-size: 16px;
+      }
+
+      .userLabel {
+        color: #6b7280;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .featuresSection {
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #000000;
+      margin: 0 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #eaeaea;
+    }
+
+    .featuresGrid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .featureItem {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #eaeaea;
+
+      img {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      .featureContent {
+        .featureLabel {
+          display: block;
+          font-weight: 600;
+          color: #111827;
+          font-size: 14px;
+          margin-bottom: 4px;
+        }
+
+        .featureValue {
+          margin: 0;
+          color: #6b7280;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eaeaea;
+  }
+
+  .description {
+    .descriptionContent {
+      line-height: 1.6;
+      color: #4b5563;
+      font-size: 15px;
+    }
+  }
+
+  .dimensionsSection {
+    .dimensionsGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .dimensionItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #eaeaea;
+      text-align: center;
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+
+      span {
+        font-weight: 600;
+        color: #111827;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .nearbySection {
+    .nearbyGrid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .nearbyItem {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #eaeaea;
+
+      img {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      .nearbyContent {
+        .nearbyLabel {
+          display: block;
+          font-weight: 600;
+          color: #111827;
+          font-size: 13px;
+          margin-bottom: 2px;
+        }
+
+        .nearbyValue {
+          margin: 0;
+          color: #6b7280;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// mapSection removed
+
+// Section boutons après la carte
+.actionButtonsSection {
+  padding: 0 30px 30px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 30px;
+
+  .actionButtons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    max-width: 680px;
+    margin: 8px auto 0;
+    flex-wrap: wrap;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s ease;
+      flex: 1 1 200px;
+      max-width: 240px;
+
+      img {
+        width: 18px;
+        height: 18px;
+        opacity: 0.95;
+      }
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0,0,0,0.12);
+      }
+
+      &.editBtn {
+        background: #ffffff;
+        color: #111827;
+        
+        &:hover {
+          background: #f5f5f5;
+        }
+      }
+
+      &.deleteBtn {
+        background: #ff4757;
+        color: #ffffff;
+
+        &:hover {
+          background: #ff3742;
+        }
+      }
+
+      &.contactBtn {
+        background: #000000;
+        color: #ffffff;
+
+        &:hover {
+          background: #333333;
+        }
+      }
+
+      &.saveBtn {
+        background: #ffffff;
+        color: #111827;
+        border: 1px solid #eaeaea;
+
+        &:hover {
+          background: #f5f5f5;
+          border-color: #e5e5e5;
+        }
+
+        &.saved {
+          background: #111111;
+          color: #ffffff;
+          border-color: #111111;
+
+          &:hover {
+            background: #333333;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 1200px) {
+  .modalContent {
+    width: 95vw;
+    max-width: 1200px;
+  }
+
+  .contentSection {
+    gap: 30px;
+    padding: 25px;
+  }
+
+  .mapSection {
+    padding: 0 25px 25px;
+  }
+
+  .actionButtonsSection {
+    padding: 0 25px 25px;
+    padding-top: 25px;
+  }
+
+  .leftColumn .media {
+    // slightly smaller on medium-large screens
+    .slider,
+    .sliderContainer,
+    & > div { height: 440px; }
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    max-width: 95vw;
+    max-height: 95vh;
+    margin: 10px;
+  }
+
+  .contentSection {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 20px;
+  }
+
+  .leftColumn .media {
+    position: static; // disable sticky on small screens
+    .slider,
+    .sliderContainer,
+    & > div { height: 300px; }
+  }
+
+  .leftColumn {
+    .header {
+      .title {
+        font-size: 24px;
+      }
+
+      .price {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .rightColumn {
+    .dimensionsSection .dimensionsGrid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
+  .mapSection {
+    padding: 0 20px 20px;
+
+    .mapContainer {
+      height: 250px;
+    }
+  }
+
+  .actionButtonsSection {
+    padding: 0 20px 20px;
+    padding-top: 20px;
+
+    .actionButtons {
+      flex-direction: column;
+      gap: 12px;
+
+      .btn {
+        max-width: none;
+        justify-content: center;
+      }
+    }
+  }
+}

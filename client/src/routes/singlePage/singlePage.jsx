@@ -16,8 +16,8 @@ function SinglePage() {
   const handleSave = async () => {
     if (!currentUser) {
       navigate("/login");
+      return;
     }
-    // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
     setSaved((prev) => !prev);
     try {
       await apiRequest.post("/users/save", { postId: post.id });
@@ -26,6 +26,56 @@ function SinglePage() {
       setSaved((prev) => !prev);
     }
   };
+
+  const handleContact = async () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    if (currentUser.id === post.userId) {
+      alert("Vous ne pouvez pas vous contacter vous-même !");
+      return;
+    }
+
+    try {
+      const response = await apiRequest.post("/chats", {
+        receiverId: post.userId
+      });
+      
+      navigate("/profile", { 
+        state: { 
+          openChat: response.data.id,
+          receiver: post.user 
+        } 
+      });
+    } catch (err) {
+      console.log(err);
+      alert("Erreur lors de l'envoi du message. Veuillez réessayer.");
+    }
+  };
+
+  // ✅ Fonction pour supprimer le post
+  const handleDelete = async () => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible.")) {
+      try {
+        await apiRequest.delete(`/posts/${post.id}`);
+        alert("Post supprimé avec succès !");
+        navigate("/profile");
+      } catch (err) {
+        console.log(err);
+        alert("Erreur lors de la suppression du post");
+      }
+    }
+  };
+
+  // ✅ Fonction pour modifier le post
+  const handleEdit = () => {
+    navigate(`/add?edit=${post.id}`);
+  };
+
+  // ✅ Vérifier si l'utilisateur est le propriétaire
+  const isOwner = currentUser && currentUser.id === post.userId;
 
   return (
     <div className="singlePage">
@@ -43,7 +93,7 @@ function SinglePage() {
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.avatar} alt="" />
+                <img src={post.user.avatar || "/noavatar.jpg"} alt="" />
                 <span>{post.user.username}</span>
               </div>
             </div>
@@ -139,19 +189,51 @@ function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
-              <img src="/chat.png" alt="" />
-              Send a Message
-            </button>
-            <button
-              onClick={handleSave}
-              style={{
-                backgroundColor: saved ? "#fece51" : "white",
-              }}
-            >
-              <img src="/save.png" alt="" />
-              {saved ? "Place Saved" : "Save the Place"}
-            </button>
+            {/* ✅ Boutons conditionnels selon le propriétaire */}
+            {isOwner ? (
+              // Boutons pour le propriétaire
+              <>
+                <button
+                  onClick={handleEdit}
+                  style={{
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                  }}
+                >
+                  <img src="/edit.png" alt="" />
+                  Modifier
+                </button>
+
+                <button
+                  onClick={handleDelete}
+                  style={{
+                    backgroundColor: "#ff4444",
+                    color: "white",
+                  }}
+                >
+                  <img src="/delete.png" alt="" />
+                  Supprimer
+                </button>
+              </>
+            ) : (
+              // Boutons pour les autres utilisateurs
+              <>
+                <button onClick={handleContact}>
+                  <img src="/chat.png" alt="" />
+                  Send a Message
+                </button>
+
+                <button
+                  onClick={handleSave}
+                  style={{
+                    backgroundColor: saved ? "#fece51" : "white",
+                  }}
+                >
+                  <img src="/save.png" alt="" />
+                  {saved ? "Place Saved" : "Save the Place"}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

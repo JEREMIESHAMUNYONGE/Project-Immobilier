@@ -7,14 +7,16 @@ import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
-import NewPostPage from "./routes/newPostPage/newPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
+import Admin from "./routes/admin/admin";
+import ErrorPage from "./routes/error/ErrorPage";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorPage />,
       children: [
         {
           path: "/",
@@ -44,6 +46,7 @@ function App() {
     {
       path: "/",
       element: <RequireAuth />,
+      errorElement: <ErrorPage />,
       children: [
         {
           path: "/profile",
@@ -55,8 +58,8 @@ function App() {
           element: <ProfileUpdatePage />,
         },
         {
-          path: "/add",
-          element: <NewPostPage />,
+          path: "/admin",
+          element: <Admin />,
         },
       ],
     },

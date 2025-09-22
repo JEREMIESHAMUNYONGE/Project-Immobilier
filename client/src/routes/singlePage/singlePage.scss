@@ -26,12 +26,14 @@
       @include lg {
         padding-right: 20px;
       }
+
       @include md {
         padding-right: 0px;
       }
 
       .info {
         margin-top: 50px;
+
         .top {
           display: flex;
           justify-content: space-between;
@@ -45,9 +47,11 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+
             h1 {
               font-weight: 400;
             }
+
             .address {
               display: flex;
               gap: 5px;
@@ -60,6 +64,7 @@
                 height: 16px;
               }
             }
+
             .price {
               padding: 5px;
               background-color: rgba(254, 205, 81, 0.438);
@@ -69,6 +74,7 @@
               font-weight: 300;
             }
           }
+
           .user {
             display: flex;
             flex-direction: column;
@@ -92,6 +98,7 @@
             }
           }
         }
+
         .bottom {
           margin-top: 50px;
           color: #555;
@@ -100,6 +107,7 @@
       }
     }
   }
+
   .features {
     flex: 2;
     background-color: #fcf5f3;
@@ -146,6 +154,7 @@
           span {
             font-weight: bold;
           }
+
           p {
             font-size: 14px;
           }
@@ -160,6 +169,7 @@
         background-color: white;
         border-radius: 10px;
       }
+
       .listHorizontal {
         display: flex;
         justify-content: space-between;
@@ -193,21 +203,60 @@
 
       .buttons {
         display: flex;
-        justify-content: space-between;
+        gap: 20px;
+        margin-top: 20px;
 
         button {
-          padding: 20px;
           display: flex;
           align-items: center;
-          gap: 5px;
+          gap: 8px;
+          padding: 12px 24px;
+          border: 2px solid #fece51;
           background-color: white;
-          border: 1px solid #fece51;
-          border-radius: 5px;
+          color: #fece51;
           cursor: pointer;
+          border-radius: 5px;
+          font-weight: bold;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
 
           img {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
+          }
+
+          // Style par défaut pour tous les boutons
+          &[style*="background-color: #4CAF50"] {
+            background-color: white !important;
+            color: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+            
+            &:hover {
+              background-color: #4CAF50 !important;
+              color: white !important;
+            }
+          }
+
+          &[style*="background-color: #ff4444"] {
+            background-color: white !important;
+            color: #ff4444 !important;
+            border-color: #ff4444 !important;
+            
+            &:hover {
+              background-color: #ff4444 !important;
+              color: white !important;
+            }
+          }
+
+          // Garder le style original pour Save (jaune)
+          &[style*="background-color: #fece51"] {
+            background-color: #fece51 !important;
+            color: black !important;
+            border-color: #fece51 !important;
           }
         }
       }

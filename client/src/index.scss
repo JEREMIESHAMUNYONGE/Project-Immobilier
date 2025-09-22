@@ -1,4 +1,4 @@
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -9,7 +9,8 @@ a {
   color: inherit;
 }
 
-body{
+body {
   font-family: "Lato", sans-serif;
-  overflow: hidden;
+  overflow-x: hidden; // Éviter le scroll horizontal indésirable
+  overflow-y: auto; // Permettre le scroll vertical normal
 }

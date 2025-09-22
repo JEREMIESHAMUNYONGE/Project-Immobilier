@@ -35,6 +35,11 @@ function Navbar() {
               {number > 0 && <div className="notification">{number}</div>}
               <span>Profile</span>
             </Link>
+            {currentUser?.isAdmin && (
+              <Link to="/admin" className="profile" title="Administration">
+                <span>Admin</span>
+              </Link>
+            )}
           </div>
         ) : (
           <>
@@ -52,12 +57,21 @@ function Navbar() {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <a href="/">Home</a>
+          <Link to="/">Home</Link>
           <a href="/">About</a>
           <a href="/">Contact</a>
           <a href="/">Agents</a>
-          <a href="/">Sign in</a>
-          <a href="/">Sign up</a>
+          {currentUser ? (
+            <>
+              <Link to="/profile">Profile</Link>
+              {currentUser?.isAdmin && <Link to="/admin">Admin</Link>}
+            </>
+          ) : (
+            <>
+              <Link to="/login">Sign in</Link>
+              <Link to="/register">Sign up</Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

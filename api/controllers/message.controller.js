@@ -5,6 +5,10 @@ export const addMessage = async (req, res) => {
   const chatId = req.params.chatId;
   const text = req.body.text;
 
+  if (!text || text.trim() === "") {
+    return res.status(400).json({ message: "Message text is required!" });
+  }
+
   try {
     const chat = await prisma.chat.findUnique({
       where: {
@@ -19,7 +23,7 @@ export const addMessage = async (req, res) => {
 
     const message = await prisma.message.create({
       data: {
-        text,
+        text: text.trim(),
         chatId,
         userId: tokenUserId,
       },
@@ -30,12 +34,18 @@ export const addMessage = async (req, res) => {
         id: chatId,
       },
       data: {
-        seenBy: [tokenUserId],
-        lastMessage: text,
+        seenBy: {
+          set: [tokenUserId],
+        },
+        lastMessage: text.trim(),
       },
     });
 
-    res.status(200).json(message);
+    // ✅ Inclure chatId dans la réponse pour Socket
+    res.status(200).json({
+      ...message,
+      chatId: chatId // Ajouter chatId pour Socket
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to add message!" });

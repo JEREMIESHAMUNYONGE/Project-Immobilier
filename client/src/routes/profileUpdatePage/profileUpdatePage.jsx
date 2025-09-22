@@ -23,59 +23,94 @@ function ProfileUpdatePage() {
         username,
         email,
         password,
-        avatar:avatar[0]
+        avatar: avatar[0]
       });
       updateUser(res.data);
       navigate("/profile");
     } catch (err) {
       console.log(err);
-      setError(err.response.data.message);
+      setError(err?.response?.data?.message || "Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
   return (
     <div className="profileUpdatePage">
-      <div className="formContainer">
-        <form onSubmit={handleSubmit}>
-          <h1>Update Profile</h1>
-          <div className="item">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              defaultValue={currentUser.username}
-            />
+      <div className="card">
+        <div className="cardBody">
+          <div className="leftPanel">
+            <form onSubmit={handleSubmit} className="updateForm" noValidate>
+              <div className="formHeader">
+                <h1>Modifier mon profil</h1>
+                <p>Mettez à jour vos informations personnelles</p>
+              </div>
+
+              <div className="formGrid">
+                <div className="formGroup">
+                  <label htmlFor="username">Nom d'utilisateur</label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Votre nom d'utilisateur"
+                    defaultValue={currentUser?.username || ""}
+                    autoComplete="username"
+                  />
+                </div>
+
+                <div className="formGroup">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="votre@email.com"
+                    defaultValue={currentUser?.email || ""}
+                    autoComplete="email"
+                  />
+                </div>
+
+                <div className="formGroup fullWidth">
+                  <label htmlFor="password">Mot de passe (laisser vide pour ne pas changer)</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                  />
+                </div>
+              </div>
+
+              {error && <div className="errorAlert">{error}</div>}
+
+              <div className="formActions">
+                <button type="submit" className="submitButton">Enregistrer</button>
+              </div>
+            </form>
           </div>
-          <div className="item">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              defaultValue={currentUser.email}
-            />
+
+          <div className="rightPanel">
+            <div className="avatarCard">
+              <div className="avatarPreview">
+                <img src={avatar[0] || currentUser?.avatar || "/noavatar.jpg"} alt="Avatar utilisateur" className="avatar" />
+              </div>
+              <div className="avatarActions">
+                <UploadWidget
+                  uwConfig={{
+                    cloudName: "lamadev",
+                    uploadPreset: "estate",
+                    multiple: false,
+                    maxImageFileSize: 2000000,
+                    folder: "avatars",
+                  }}
+                  setState={setAvatar}
+                  label={"Mettre à jour l'image"}
+                />
+                <p className="helperText">Taille max: 2MB. Formats: JPG, PNG.</p>
+              </div>
+            </div>
           </div>
-          <div className="item">
-            <label htmlFor="password">Password</label>
-            <input id="password" name="password" type="password" />
-          </div>
-          <button>Update</button>
-          {error && <span>error</span>}
-        </form>
-      </div>
-      <div className="sideContainer">
-        <img src={avatar[0] || currentUser.avatar || "/noavatar.jpg"} alt="" className="avatar" />
-        <UploadWidget
-          uwConfig={{
-            cloudName: "lamadev",
-            uploadPreset: "estate",
-            multiple: false,
-            maxImageFileSize: 2000000,
-            folder: "avatars",
-          }}
-          setState={setAvatar}
-        />
+        </div>
       </div>
     </div>
   );

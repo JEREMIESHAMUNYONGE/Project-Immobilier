@@ -18,20 +18,21 @@ function Login() {
     setError("");
     const formData = new FormData(e.target);
 
-    const username = formData.get("username");
+    const identifier = formData.get("username");
     const password = formData.get("password");
+    // Send both username and email for maximum backend compatibility
+    const payload = { username: identifier, email: identifier, password };
 
     try {
-      const res = await apiRequest.post("/auth/login", {
-        username,
-        password,
-      });
+      const res = await apiRequest.post("/auth/login", payload);
 
-      updateUser(res.data)
+      updateUser(res.data);
 
-      navigate("/");
+      const destination = res.data?.isAdmin ? "/admin" : "/";
+      navigate(destination);
     } catch (err) {
-      setError(err.response.data.message);
+      console.error(err?.response || err);
+      setError(err?.response?.data?.message || "Identifiants invalides");
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +48,7 @@ function Login() {
             minLength={3}
             maxLength={20}
             type="text"
-            placeholder="Username"
+            placeholder="Nom d'utilisateur ou email"
           />
           <input
             name="password"

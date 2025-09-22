@@ -6,14 +6,26 @@ import { format } from "timeago.js";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
-function Chat({ chats }) {
+function Chat({ chats, openChatId, onChatOpen }) {
+  console.log(chats);
+  
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { socket } = useContext(SocketContext);
 
   const messageEndRef = useRef();
-
   const decrease = useNotificationStore((state) => state.decrease);
+
+  // ✅ Ouvrir automatiquement un chat spécifique
+  useEffect(() => {
+    if (openChatId && chats) {
+      const targetChat = chats.find(c => c.id === openChatId);
+      if (targetChat) {
+        handleOpenChat(targetChat.id, targetChat.receiver);
+        onChatOpen && onChatOpen(null); // Reset l'ID après ouverture
+      }
+    }
+  }, [openChatId, chats]);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,8 +74,20 @@ function Chat({ chats }) {
 
     if (chat && socket) {
       socket.on("getMessage", (data) => {
+        console.log("Message reçu via Socket:", data);
         if (chat.id === data.chatId) {
-          setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
+          // ✅ S'assurer que le message a la bonne structure
+          const messageWithId = {
+            ...data,
+            id: data.id || Date.now(), // Fallback si pas d'ID
+            userId: data.userId || data.senderId, // Fallback pour userId
+            createdAt: data.createdAt || new Date().toISOString()
+          };
+          
+          setChat((prev) => ({ 
+            ...prev, 
+            messages: [...prev.messages, messageWithId] 
+          }));
           read();
         }
       });
@@ -76,59 +100,54 @@ function Chat({ chats }) {
   return (
     <div className="chat">
       <div className="messages">
-        <h1>Messages</h1>
-        {chats?.map((c) => (
-          <div
-            className="message"
-            key={c.id}
-            style={{
-              backgroundColor:
-                c.seenBy.includes(currentUser.id) || chat?.id === c.id
-                  ? "white"
-                  : "#fecd514e",
-            }}
-            onClick={() => handleOpenChat(c.id, c.receiver)}
-          >
-            <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
-            <span>{c.receiver.username}</span>
-            <p>{c.lastMessage}</p>
-          </div>
-        ))}
+        <h2 className="messagesTitle">Messages</h2>
+        {chats?.map((c) => {
+          const isActive = chat?.id === c.id;
+          const isRead = c.seenBy.includes(currentUser.id);
+          return (
+            <div
+              className={`message ${isActive ? "active" : ""} ${!isRead && !isActive ? "unread" : ""}`}
+              key={c.id}
+              onClick={() => handleOpenChat(c.id, c.receiver)}
+            >
+              <img src={c.receiver.avatar || "/noavatar.jpg"} alt="Avatar" />
+              <div className="messageContent">
+                <span className="username">{c.receiver.username}</span>
+                <p className="lastMessage">{c.lastMessage}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
       {chat && (
         <div className="chatBox">
           <div className="top">
             <div className="user">
-              <img src={chat.receiver.avatar || "noavatar.jpg"} alt="" />
-              {chat.receiver.username}
+              <img src={chat.receiver.avatar || "/noavatar.jpg"} alt="Avatar" />
+              <span className="username">{chat.receiver.username}</span>
             </div>
-            <span className="close" onClick={() => setChat(null)}>
-              X
-            </span>
+            <button className="close" onClick={() => setChat(null)} aria-label="Fermer la conversation">
+              ✕
+            </button>
           </div>
           <div className="center">
-            {chat.messages.map((message) => (
-              <div
-                className="chatMessage"
-                style={{
-                  alignSelf:
-                    message.userId === currentUser.id
-                      ? "flex-end"
-                      : "flex-start",
-                  textAlign:
-                    message.userId === currentUser.id ? "right" : "left",
-                }}
-                key={message.id}
-              >
-                <p>{message.text}</p>
-                <span>{format(message.createdAt)}</span>
-              </div>
-            ))}
+            {chat.messages.map((message) => {
+              const isOwn = message.userId === currentUser.id;
+              return (
+                <div
+                  className={`chatMessage ${isOwn ? "own" : ""}`}
+                  key={message.id}
+                >
+                  <p className="bubble">{message.text}</p>
+                  <span className="time">{format(message.createdAt)}</span>
+                </div>
+              );
+            })}
             <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
-            <textarea name="text"></textarea>
-            <button>Send</button>
+            <textarea name="text" placeholder="Tapez votre message..."></textarea>
+            <button type="submit" className="sendButton">Envoyer</button>
           </form>
         </div>
       )}
