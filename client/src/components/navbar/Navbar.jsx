@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
@@ -8,6 +8,8 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
@@ -15,7 +17,7 @@ function Navbar() {
   if(currentUser) fetch();
 
   return (
-    <nav>
+    <nav className={isHome ? "home" : ""}>
       <div className="left">
         <a href="/" className="logo">
           <img src="/logo.png" alt="" />
