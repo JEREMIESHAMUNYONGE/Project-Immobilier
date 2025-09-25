@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import AdminUserDetailModal from "../../components/adminUserDetailModal/AdminUserDetailModal.jsx";
 import "./admin.scss";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
@@ -16,8 +17,21 @@ function Admin() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("accueil");
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [userFull, setUserFull] = useState(null);
+  const [loadingFull, setLoadingFull] = useState(false);
+  const [activeUserTab, setActiveUserTab] = useState("profil"); // profil | annonces | favoris | messages
+  // Pagination & recherche pour la modale
+  const [postsPage, setPostsPage] = useState(1);
+  const [postsPageSize] = useState(6);
+  const [favsPage, setFavsPage] = useState(1);
+  const [favsPageSize] = useState(6);
+  const [chatsPage, setChatsPage] = useState(1);
+  const [chatsPageSize] = useState(5);
+  const [msgSearch, setMsgSearch] = useState("");
 
   // Guard: only admins can access this page
   if (currentUser && !currentUser.isAdmin) {
@@ -63,6 +77,37 @@ function Admin() {
     }
   };
 
+  const openViewModal = async (user) => {
+    setSelectedUser(user);
+    setShowViewModal(true);
+    setActiveUserTab("profil");
+    setUserFull(null);
+    setPostsPage(1);
+    setFavsPage(1);
+    setChatsPage(1);
+    setMsgSearch("");
+    try {
+      setLoadingFull(true);
+      const res = await apiRequest.get(`/admin/users/${user.id}/full`);
+      setUserFull(res.data);
+    } catch (e) {
+      console.error("Erreur chargement détails utilisateur:", e);
+      const msg = e?.response?.data?.message || "Impossible de charger les détails";
+      showToast(msg, "error");
+      // Ne pas fermer la modale; afficher l'erreur dans la modale
+      setUserFull({ error: msg });
+    } finally {
+      setLoadingFull(false);
+    }
+  };
+
+  // Reset pagination à chaque changement d'onglet
+  useEffect(() => {
+    setPostsPage(1);
+    setFavsPage(1);
+    setChatsPage(1);
+  }, [activeUserTab]);
+
   const handleLogout = async () => {
     try {
       await apiRequest.post("/auth/logout");
@@ -80,7 +125,8 @@ function Admin() {
       setUsers((prev) => prev.filter((user) => user.id !== userId));
       setShowDeleteModal(false);
       setSelectedUser(null);
-      alert("Utilisateur supprimé avec succès");
+      const deletedName = selectedUser?.username || "Utilisateur";
+      showToast(`${deletedName} supprimé avec succès`, "success", 4000);
     } catch (error) {
       console.error("Erreur lors de la suppression:", {
         status: error?.response?.status,
@@ -88,7 +134,7 @@ function Admin() {
         message: error?.message,
       });
       const msg = error?.response?.data?.message || error?.response?.data?.error || error?.message || "Erreur inconnue";
-      alert(`Erreur lors de la suppression de l'utilisateur: ${msg}`);
+      showToast(msg, "error", 4000);
     }
   };
 
@@ -165,8 +211,14 @@ function Admin() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error("Export CSV échoué", e);
-      alert("Export CSV échoué");
+      showToast("Export CSV échoué", "error");
     }
+  };
+
+  const showToast = (message, type = "success", duration = 4000) => {
+    setToast({ visible: true, message, type });
+    window.clearTimeout(showToast._t);
+    showToast._t = window.setTimeout(() => setToast({ visible: false, message: "", type }), duration);
   };
 
   if (loading) {
@@ -457,7 +509,7 @@ function Admin() {
                     <div>{user.savedPostsCount || 0}</div>
                     <div>{user.messagesCount || 0}</div>
                     <div className="actions">
-                      <button className="btn view" onClick={() => setSelectedUser(user)} title="Voir le profil">Voir</button>
+                      <button className="btn view" onClick={() => openViewModal(user)} title="Voir le profil">Voir</button>
                       <button
                         className="btn delete"
                         onClick={() => { setSelectedUser(user); setShowDeleteModal(true); }}
@@ -514,6 +566,13 @@ function Admin() {
           </div>
         </div>
       )}
+
+      {/* Modal de vue détaillée utilisateur (nouveau composant) */}
+      <AdminUserDetailModal
+        open={!!showViewModal && !!selectedUser}
+        user={selectedUser}
+        onClose={() => setShowViewModal(false)}
+      />
     </div>
   );
 }

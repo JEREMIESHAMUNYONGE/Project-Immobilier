@@ -1,0 +1,107 @@
+.audm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.audm-modal {
+  width: min(1000px, 96%);
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 20px 60px rgba(0,0,0,.12);
+  display: flex;
+  flex-direction: column;
+}
+
+.audm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.audm-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.audm-title img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
+}
+.audm-title h3 { margin: 0; font-size: 18px; color: #111; }
+.audm-title p { margin: 0; color: #666; font-size: 12px; }
+
+.audm-close {
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.audm-body { display: grid; grid-template-columns: 260px 1fr; gap: 0; }
+
+.audm-aside { border-right: 1px solid #f0f0f0; padding: 14px; }
+.audm-kpis { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.audm-kpis .kpi { background: #fafafa; border: 1px solid #f0f0f0; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+.audm-kpis .kpi span { color: #666; font-size: 12px; }
+.audm-kpis .kpi strong { font-size: 18px; color: #111; }
+.audm-meta { margin-top: 14px; display: grid; gap: 8px; }
+.audm-meta > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.audm-id { background: #f7f7f7; border: 1px solid #eaeaea; padding: 2px 6px; font-size: 12px; }
+
+.audm-content { padding: 14px; }
+.audm-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+.audm-tabs .tab { border: 1px solid #e0e0e0; background: #fff; color: #111; padding: 8px 12px; font-weight: 700; cursor: pointer; }
+.audm-tabs .tab.active { background: #111; color: #fff; }
+
+.audm-loading { padding: 12px; }
+.audm-error { padding: 12px; color: #9b0000; background: #fff5f5; border: 1px solid #ffd6d6; }
+.audm-empty { padding: 12px; color: #666; }
+
+.audm-panel { display: flex; flex-direction: column; gap: 12px; }
+.audm-profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; }
+.audm-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.audm-list li { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #f0f0f0; padding: 8px 10px; }
+.audm-list span { color: #666; }
+
+.audm-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 12px; }
+.audm-card { border: 1px solid #eee; padding: 12px; background: #fff; display: flex; flex-direction: column; gap: 6px; }
+.audm-card .title { font-weight: 800; color: #111; }
+.audm-card .sub { color: #666; font-size: 13px; }
+.audm-card .desc { font-size: 13px; color: #333; }
+.audm-card .meta { color: #888; font-size: 12px; }
+.audm-card .link { display: inline-block; border: 1px solid #111; background: #111; color: #fff; padding: 6px 10px; font-weight: 700; text-decoration: none; width: fit-content; }
+
+.audm-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.audm-toolbar .title { font-weight: 700; }
+.audm-toolbar input { flex: 1; background: #f7f7f7; border: 1px solid #eaeaea; padding: 8px 10px; }
+
+.audm-chats { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.audm-chat { border: 1px solid #eee; background: #fff; }
+.audm-chat .head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #f3f3f3; }
+.audm-chat .head img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.audm-chat .head .name { font-weight: 700; }
+.audm-chat .head .last { margin-left: auto; font-size: 12px; color: #666; }
+.audm-chat .messages { max-height: 240px; overflow: auto; padding: 10px 12px; }
+.audm-chat .msg { font-size: 13px; margin-bottom: 8px; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; }
+.audm-chat .msg .from { font-weight: 700; }
+.audm-chat .msg .text { color: #222; }
+.audm-chat .msg .time { color: #888; font-size: 11px; }
+
+@media (max-width: 820px) {
+  .audm-body { grid-template-columns: 1fr; }
+  .audm-aside { border-right: none; border-bottom: 1px solid #f0f0f0; }
+}

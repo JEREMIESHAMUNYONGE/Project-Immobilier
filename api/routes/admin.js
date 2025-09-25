@@ -88,9 +88,12 @@ router.delete("/users/:id", async (req, res) => {
             where: { userId: id }
         });
 
-        await prisma.post.deleteMany({
-            where: { userId: id }
-        });
+        const userPosts = await prisma.post.findMany({ where: { userId: id }, select: { id: true } });
+        const postIds = userPosts.map(p => p.id);
+        if (postIds.length > 0) {
+            await prisma.postDetail.deleteMany({ where: { postId: { in: postIds } } });
+        }
+        await prisma.post.deleteMany({ where: { id: { in: postIds } } });
 
         await prisma.user.delete({
             where: { id: id }
@@ -147,6 +150,101 @@ router.get("/users/:id", async (req, res) => {
     } catch (error) {
         console.error("Erreur:", error);
         res.status(500).json({ message: "Erreur lors de la récupération des détails de l'utilisateur" });
+    }
+});
+
+// Obtenir TOUTES les infos d'un utilisateur (profil, annonces, favoris, discussions + messages)
+router.get("/users/:id/full", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Profil utilisateur de base + stats
+        const user = await prisma.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                avatar: true,
+                isAdmin: true,
+                createdAt: true,
+                _count: {
+                    select: {
+                        posts: true,
+                        savedPosts: true,
+                        chats: true,
+                    },
+                },
+            },
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+
+        // Annonces de l'utilisateur
+        const posts = await prisma.post.findMany({
+            where: { userId: id },
+            include: {
+                postDetail: true,
+            },
+            orderBy: { createdAt: "desc" },
+        });
+
+        // Favoris (maisons sauvegardées)
+        const saved = await prisma.savedPost.findMany({
+            where: { userId: id },
+            include: {
+                post: {
+                    include: { postDetail: true },
+                },
+            },
+            orderBy: { createdAt: "desc" },
+        });
+        const savedPosts = saved.map((s) => s.post);
+
+        // Discussions + messages
+        const chats = await prisma.chat.findMany({
+            where: { userIDs: { hasSome: [id] } },
+            include: {
+                messages: {
+                    orderBy: { createdAt: "asc" },
+                },
+            },
+            orderBy: { createdAt: "desc" },
+        });
+
+        // Ajouter info du correspondant pour chaque chat
+        for (const chat of chats) {
+            const otherId = chat.userIDs.find((uid) => uid !== id);
+            if (otherId) {
+                const other = await prisma.user.findUnique({
+                    where: { id: otherId },
+                    select: { id: true, username: true, avatar: true, email: true },
+                });
+                chat.receiver = other;
+            }
+        }
+
+        res.status(200).json({
+            user: {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                avatar: user.avatar,
+                isAdmin: user.isAdmin,
+                createdAt: user.createdAt,
+                postsCount: user._count.posts,
+                savedPostsCount: user._count.savedPosts,
+                messagesCount: user._count.chats,
+            },
+            posts,
+            savedPosts,
+            chats,
+        });
+    } catch (error) {
+        console.error("Erreur lors de la récupération complète de l'utilisateur:", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des données complètes de l'utilisateur" });
     }
 });
 
