@@ -1,61 +1,80 @@
+@import "../../responsive.scss";
+
 .registerPage {
-  height: 100%;
-  display: flex;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: #fafafa;
 
-  .formContainer {
-    flex: 3;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  @include md {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+  .card {
+    grid-column: 1 / span 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(0,0,0,.06);
 
+    @include md {
+      grid-template-columns: 1fr;
+    }
+
+    .cardLeft {
+      padding: 24px;
+      background: linear-gradient(180deg, #111 0%, #222 100%);
+      color: #fff;
+
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+      .brand img { width: 28px; height: 28px; border-radius: 6px; background: #fff; }
+      h1 { margin: 12px 0 8px; font-size: 28px; }
+      p { margin: 0; color: #d1d5db; }
+    }
+
+    .cardRight {
+      padding: 24px;
+
+      form { display: grid; gap: 14px; }
+
+      .formGroup { display: grid; gap: 6px; }
+      label { font-weight: 700; color: #111; }
       input {
-        padding: 20px;
-        border: 1px solid gray;
-        border-radius: 5px;
+        padding: 12px 14px;
+        border: 1px solid #e4e4e7;
+        border-radius: 10px;
+        background: #fff;
+        transition: box-shadow .18s ease, border-color .18s ease;
       }
+      input:focus { outline: none; border-color: #111; box-shadow: 0 0 0 3px rgba(17,17,17,.08); }
 
-      button {
-        padding: 20px;
-        border-radius: 5px;
-        border: none;
-        background-color: teal;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
+      .passwordField { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+      .togglePassword { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; cursor: pointer; font-weight: 600; }
+      .togglePassword:hover { background: #f5f5f5; }
 
-        &:disabled {
-          background-color: #bed9d8;
-          cursor: not-allowed;
-        }
-      }
+      .errorAlert { padding: 10px 12px; border: 1px solid #fee2e2; background: #fef2f2; color: #991b1b; border-radius: 10px; }
 
-      span {
-        color: rgba(255, 0, 0, 0.591);
-      }
+      .submitButton { padding: 12px 14px; border: 1px solid #111; background: #111; color: #fff; border-radius: 10px; font-weight: 800; cursor: pointer; }
+      .submitButton:disabled { opacity: .7; cursor: not-allowed; }
+      .submitButton:hover { background: #000; }
 
-      a {
-        font-size: 14px;
-        color: gray;
-        border-bottom: 1px solid gray;
-        width: max-content;
-      }
+      .formFooter { display: flex; gap: 8px; align-items: center; color: #666; }
+      .formFooter a { color: #111; font-weight: 700; text-decoration: none; border-bottom: 1px solid #111; }
     }
   }
 
-  .imgContainer {
-    flex: 2;
-    background-color: #fcf5f3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    img {
-      width: 100%;
-    }
+  .heroImage {
+    grid-column: 2 / span 1;
+    display: grid; place-items: center; padding: 24px; background: #fcf5f3; border: 1px solid #faeaea; border-radius: 16px;
+    img { max-width: 100%; height: auto; display: block; }
+
+    @include md { display: none; }
   }
 }

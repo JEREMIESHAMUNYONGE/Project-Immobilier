@@ -76,6 +76,11 @@ export const addPost = async (req, res) => {
   const body = req.body;
   const tokenUserId = req.userId;
 
+  // Seuls les propriétaires peuvent créer une annonce
+  if (!req.isProprietaire) {
+    return res.status(403).json({ message: "Seuls les propriétaires peuvent créer une annonce" });
+  }
+
   // Validation for required fields
   if (!body.postData || !body.postDetail) {
     return res.status(400).json({ message: "postData and postDetail are required!" });

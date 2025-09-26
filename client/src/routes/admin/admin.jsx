@@ -5,6 +5,7 @@ import "./admin.scss";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 import { format } from "timeago.js";
+import ProfileUpdatePage from "../profileUpdatePage/profileUpdatePage.jsx";
 
 function Admin() {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -19,7 +20,7 @@ function Admin() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [toast, setToast] = useState({ visible: false, message: "", type: "success" });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("accueil");
+  const [activeTab, setActiveTab] = useState("accueil"); // accueil | utilisateurs | annonces | messages | create-owner | profile-update
   const [showViewModal, setShowViewModal] = useState(false);
   const [userFull, setUserFull] = useState(null);
   const [loadingFull, setLoadingFull] = useState(false);
@@ -32,6 +33,12 @@ function Admin() {
   const [chatsPage, setChatsPage] = useState(1);
   const [chatsPageSize] = useState(5);
   const [msgSearch, setMsgSearch] = useState("");
+
+  // Création propriétaire
+  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [creatingOwner, setCreatingOwner] = useState(false);
 
   // Guard: only admins can access this page
   if (currentUser && !currentUser.isAdmin) {
@@ -51,6 +58,33 @@ function Admin() {
       console.error("Erreur lors du chargement des utilisateurs:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createOwner = async (e) => {
+    e?.preventDefault?.();
+    if (!newUsername.trim() || !newEmail.trim() || !newPassword || newPassword.length < 6) {
+      showToast("Veuillez saisir un nom, un email valide et un mot de passe (≥ 6 caractères)", "error");
+      return;
+    }
+    try {
+      setCreatingOwner(true);
+      await apiRequest.post("/admin/users", {
+        username: newUsername.trim(),
+        email: newEmail.trim(),
+        password: newPassword,
+        isProprietaire: true
+      });
+      setNewUsername("");
+      setNewEmail("");
+      setNewPassword("");
+      await fetchUsers();
+      showToast("Compte propriétaire créé avec succès", "success");
+    } catch (error) {
+      const msg = error?.response?.data?.message || error?.message || "Erreur lors de la création";
+      showToast(msg, "error");
+    } finally {
+      setCreatingOwner(false);
     }
   };
 
@@ -264,20 +298,17 @@ function Admin() {
               Utilisateurs
             </button>
             <button
-              className={`navItem ${
-                activeTab === "annonces" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("annonces")}
+              className={`navItem ${activeTab === "create-owner" ? "active" : ""}`}
+              onClick={() => setActiveTab("create-owner")}
             >
-              Annonces
+              Créer un propriétaire
             </button>
+            {/* Onglets "Annonces" et "Messages" retirés du dashboard admin */}
             <button
-              className={`navItem ${
-                activeTab === "messages" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("messages")}
+              className={`navItem ${activeTab === "profile-update" ? "active" : ""}`}
+              onClick={() => setActiveTab("profile-update")}
             >
-              Messages
+              Modifier mon profil
             </button>
           </div>
         </div>
@@ -296,9 +327,9 @@ function Admin() {
             </div>
           </div>
           <div className="userActions">
-            <Link to="/profile/update" className="updateButton">
+            <button className="updateButton" onClick={() => setActiveTab("profile-update")}>
               Modifier le profil
-            </Link>
+            </button>
             <button className="logoutButton" onClick={handleLogout}>
               Déconnexion
             </button>
@@ -456,6 +487,63 @@ function Admin() {
               </div>
             </div>
           </>
+        )}
+
+        {activeTab === "create-owner" && (
+          <div className="adminContent" style={{ background:'#fff', border:'1px solid #eaeaea', padding:20 }}>
+            <h2 style={{ marginTop:0 }}>Créer un propriétaire</h2>
+            <p style={{ color:'#666', marginTop:4 }}>Renseignez les informations ci-dessous pour créer un compte propriétaire.</p>
+            <form onSubmit={createOwner} className="createOwnerForm" style={{ display:'grid', gap:12, maxWidth:560, marginTop:16 }}>
+              <div style={{ display:'grid', gap:6 }}>
+                <label>Nom d'utilisateur</label>
+                <input
+                  type="text"
+                  placeholder="Ex: johndoe"
+                  value={newUsername}
+                  onChange={(e)=>setNewUsername(e.target.value)}
+                  required
+                  className="input"
+                  style={{ padding:'10px 12px', border:'1px solid #ddd' }}
+                />
+              </div>
+              <div style={{ display:'grid', gap:6 }}>
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="exemple@mail.com"
+                  value={newEmail}
+                  onChange={(e)=>setNewEmail(e.target.value)}
+                  required
+                  className="input"
+                  style={{ padding:'10px 12px', border:'1px solid #ddd' }}
+                />
+              </div>
+              <div style={{ display:'grid', gap:6 }}>
+                <label>Mot de passe</label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={newPassword}
+                  onChange={(e)=>setNewPassword(e.target.value)}
+                  required
+                  className="input"
+                  style={{ padding:'10px 12px', border:'1px solid #ddd' }}
+                />
+              </div>
+              <div style={{ display:'flex', gap:8 }}>
+                <button type="submit" className="btn" disabled={creatingOwner}>
+                  {creatingOwner ? 'Création…' : 'Créer le propriétaire'}
+                </button>
+                <button type="button" className="btn secondary" onClick={()=>{ setNewUsername(''); setNewEmail(''); setNewPassword(''); }}>Réinitialiser</button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {activeTab === "profile-update" && (
+          <div className="adminContent" style={{ background:'#fff', border:'1px solid #eaeaea', padding:12 }}>
+            <ProfileUpdatePage stayInDashboard={true} onSaved={()=>{ /* Optionnel: toast */ }} />
+          </div>
         )}
 
         {activeTab === "utilisateurs" && (

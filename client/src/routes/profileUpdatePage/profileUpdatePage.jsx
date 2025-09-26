@@ -5,7 +5,7 @@ import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
 import UploadWidget from "../../components/uploadWidget/UploadWidget";
 
-function ProfileUpdatePage() {
+function ProfileUpdatePage({ stayInDashboard = false, onSaved }) {
   const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [avatar, setAvatar] = useState([]);
@@ -26,7 +26,10 @@ function ProfileUpdatePage() {
         avatar: avatar[0]
       });
       updateUser(res.data);
-      navigate("/profile");
+      if (typeof onSaved === 'function') onSaved(res.data);
+      if (!stayInDashboard) {
+        navigate("/profile");
+      }
     } catch (err) {
       console.log(err);
       setError(err?.response?.data?.message || "Une erreur est survenue. Veuillez réessayer.");

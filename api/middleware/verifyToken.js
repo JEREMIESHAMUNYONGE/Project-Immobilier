@@ -18,6 +18,7 @@ export const verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.userId = decoded.id;
     req.isAdmin = decoded.isAdmin; // Ajouter l'information isAdmin à la requête
+    req.isProprietaire = decoded.isProprietaire === true; // Propager le rôle propriétaire
     next();
   } catch (error) {
     console.error("Erreur de vérification du token:", error);

@@ -38,7 +38,8 @@ export const register = async (req, res) => {
         username,
         email,
         password: hashedPassword,
-        isAdmin: false, // ← AJOUTER CETTE LIGNE
+        isAdmin: false, // for public registration
+        isProprietaire: false, // public signup -> locataire by default
       },
     });
 
@@ -77,6 +78,7 @@ export const login = async (req, res) => {
         email: true,
         password: true,
         isAdmin: true,
+        isProprietaire: true,
         avatar: true,
         createdAt: true
       }
@@ -105,7 +107,8 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
-        isAdmin: user.isAdmin, // ← CORRIGER CETTE LIGNE
+        isAdmin: user.isAdmin,
+        isProprietaire: user.isProprietaire,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: '7d' }

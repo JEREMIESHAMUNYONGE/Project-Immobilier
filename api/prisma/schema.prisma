@@ -77,6 +77,7 @@ model User {
   password   String
   avatar     String?
   isAdmin    Boolean     @default(false)
+  isProprietaire Boolean  @default(false)
   createdAt  DateTime    @default(now())
   posts      Post[]
   savedPosts SavedPost[]

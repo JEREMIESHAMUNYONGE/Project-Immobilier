@@ -2,6 +2,7 @@ import express from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { verifyAdmin } from "../middleware/verifyAdmin.js";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -20,6 +21,7 @@ router.get("/users", async (req, res) => {
                 username: true,
                 avatar: true,
                 isAdmin: true,
+                isProprietaire: true,
                 createdAt: true,
                 _count: {
                     select: {
@@ -50,6 +52,8 @@ router.get("/users", async (req, res) => {
         res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs" });
     }
 });
+
+export default router;
 
 // Supprimer un utilisateur et toutes ses données
 router.delete("/users/:id", async (req, res) => {
@@ -124,6 +128,7 @@ router.get("/users/:id", async (req, res) => {
                 username: true,
                 avatar: true,
                 isAdmin: true,
+                isProprietaire: true,
                 createdAt: true,
                 _count: {
                     select: {
@@ -167,6 +172,7 @@ router.get("/users/:id/full", async (req, res) => {
                 username: true,
                 avatar: true,
                 isAdmin: true,
+                isProprietaire: true,
                 createdAt: true,
                 _count: {
                     select: {
@@ -233,6 +239,7 @@ router.get("/users/:id/full", async (req, res) => {
                 username: user.username,
                 avatar: user.avatar,
                 isAdmin: user.isAdmin,
+                isProprietaire: user.isProprietaire,
                 createdAt: user.createdAt,
                 postsCount: user._count.posts,
                 savedPostsCount: user._count.savedPosts,
@@ -248,4 +255,40 @@ router.get("/users/:id/full", async (req, res) => {
     }
 });
 
-export default router;
+// Créer un compte propriétaire (réservé à l'admin)
+router.post("/users", async (req, res) => {
+  try {
+    const { username, email, password, isProprietaire } = req.body || {};
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "username, email et password sont requis" });
+    }
+
+    // Vérifier si l'utilisateur existe déjà
+    const existing = await prisma.user.findFirst({
+      where: { OR: [{ username }, { email }] },
+      select: { id: true }
+    });
+    if (existing) {
+      return res.status(400).json({ message: "Nom d'utilisateur ou email déjà utilisé" });
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    const created = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashed,
+        isAdmin: false,
+        isProprietaire: isProprietaire === true ? true : true // par défaut: propriétaire
+      },
+      select: { id: true, username: true, email: true, isAdmin: true, isProprietaire: true, createdAt: true }
+    });
+
+    res.status(201).json({ message: "Compte propriétaire créé", user: created });
+  } catch (error) {
+    console.error("Erreur création compte propriétaire:", error);
+    res.status(500).json({ message: "Erreur lors de la création du compte propriétaire" });
+  }
+});
