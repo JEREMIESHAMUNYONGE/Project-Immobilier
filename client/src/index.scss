@@ -14,3 +14,10 @@ body {
   overflow-x: hidden; // Éviter le scroll horizontal indésirable
   overflow-y: auto; // Permettre le scroll vertical normal
 }
+
+/* Contrainte de largeur globale de l'application */
+#root {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}

@@ -1,9 +1,13 @@
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import Card from "../../components/card/Card";
+import ProfileDashboardStats from "../../components/profile/ProfileDashboardStats";
+import ProfileMyPosts from "../../components/profile/ProfileMyPosts";
+import ProfileSavedPosts from "../../components/profile/ProfileSavedPosts";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
 import PostDetailModal from "../../components/postDetailModal/PostDetailModal";
+import ProfilePostDetailView from "../../components/profile/ProfilePostDetailView";
 import CreatePostModal from "../../components/createPostModal/CreatePostModal";
 import ProfileUpdatePage from "../profileUpdatePage/profileUpdatePage";
 import "./profilePage.scss";
@@ -549,178 +553,15 @@ function ProfilePage() {
               <ProfileUpdatePage />
             </div>
           ) : activeTab === "post-detail" && postDetails ? (
-            <div className="postDetailContainer">
-              {/* Slider */}
-              <div className="sliderSection">
-                <Slider images={postDetails.images} />
-              </div>
-
-              {/* Contenu en deux colonnes */}
-              <div className="contentSection">
-                {/* Colonne gauche */}
-                <div className="leftColumn">
-                  {/* En-tête avec titre et prix */}
-                  <div className="header">
-                    <h1 className="title">{postDetails.title}</h1>
-                    <div className="price">$ {postDetails.price}</div>
-                  </div>
-
-                  {/* Adresse */}
-                  <div className="address">
-                    <img src="/pin.png" alt="Adresse" />
-                    <span>{postDetails.address}</span>
-                  </div>
-
-                  {/* Informations du propriétaire */}
-                  <div className="userInfo">
-                    <img src={postDetails.user.avatar || "/noavatar.jpg"} alt={postDetails.user.username} />
-                    <div className="userDetails">
-                      <span className="username">{postDetails.user.username}</span>
-                      <span className="userLabel">Propriétaire</span>
-                    </div>
-                  </div>
-
-                  {/* Caractéristiques générales */}
-                  <div className="featuresSection">
-                    <h3>Caractéristiques</h3>
-                    <div className="featuresGrid">
-                      <div className="featureItem">
-                        <img src="/utility.png" alt="Services" />
-                        <div className="featureContent">
-                          <span className="featureLabel">Services</span>
-                          <p className="featureValue">
-                            {postDetails.postDetail.utilities === "owner" ? "Propriétaire responsable" : "Locataire responsable"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="featureItem">
-                        <img src="/pet.png" alt="Animaux" />
-                        <div className="featureContent">
-                          <span className="featureLabel">Animaux</span>
-                          <p className="featureValue">
-                            {postDetails.postDetail.pet === "allowed" ? "Autorisés" : "Non autorisés"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="featureItem">
-                        <img src="/fee.png" alt="Revenus" />
-                        <div className="featureContent">
-                          <span className="featureLabel">Revenus requis</span>
-                          <p className="featureValue">{postDetails.postDetail.income}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Boutons d'action */}
-                  <div className="actionButtons">
-                    {isOwner ? (
-                      <>
-                        <button className="btn editBtn" onClick={handleEdit}>
-                          <img src="/edit.png" alt="Modifier" />
-                          Modifier
-                        </button>
-                        <button className="btn deleteBtn" onClick={handleDelete}>
-                          <img src="/delete.png" alt="Supprimer" />
-                          Supprimer
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="btn contactBtn" onClick={handleContact}>
-                          <img src="/chat.png" alt="Contacter" />
-                          Contacter
-                        </button>
-                        <button
-                          className={`btn saveBtn ${saved ? 'saved' : ''}`}
-                          onClick={handleSave}
-                        >
-                          <img src="/save.png" alt="Sauvegarder" />
-                          {saved ? "Sauvegardé" : "Sauvegarder"}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {/* Colonne droite */}
-                <div className="rightColumn">
-                  {/* Description */}
-                  <div className="description">
-                    <h3>Description</h3>
-                    <div
-                      className="descriptionContent"
-                      dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(postDetails.postDetail.desc),
-                      }}
-                    />
-                  </div>
-
-                  {/* Dimensions */}
-                  <div className="dimensionsSection">
-                    <h3>Dimensions</h3>
-                    <div className="dimensionsGrid">
-                      <div className="dimensionItem">
-                        <img src="/size.png" alt="Surface" />
-                        <span>{postDetails.postDetail.size} m²</span>
-                      </div>
-                      <div className="dimensionItem">
-                        <img src="/bed.png" alt="Chambres" />
-                        <span>{postDetails.bedroom} chambres</span>
-                      </div>
-                      <div className="dimensionItem">
-                        <img src="/bath.png" alt="Salles de bain" />
-                        <span>{postDetails.bathroom} salles de bain</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Lieux à proximité */}
-                  <div className="nearbySection">
-                    <h3>À proximité</h3>
-                    <div className="nearbyGrid">
-                      <div className="nearbyItem">
-                        <img src="/school.png" alt="École" />
-                        <div className="nearbyContent">
-                          <span className="nearbyLabel">École</span>
-                          <p className="nearbyValue">
-                            {postDetails.postDetail.school > 999
-                              ? `${postDetails.postDetail.school / 1000} km`
-                              : `${postDetails.postDetail.school} m`}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="nearbyItem">
-                        <img src="/bus.png" alt="Transport" />
-                        <div className="nearbyContent">
-                          <span className="nearbyLabel">Transport</span>
-                          <p className="nearbyValue">{postDetails.postDetail.bus} m</p>
-                        </div>
-                      </div>
-
-                      <div className="nearbyItem">
-                        <img src="/restaurant.png" alt="Restaurant" />
-                        <div className="nearbyContent">
-                          <span className="nearbyLabel">Restaurant</span>
-                          <p className="nearbyValue">{postDetails.postDetail.restaurant} m</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Carte en pleine largeur */}
-              <div className="mapSection">
-                <h3>Localisation</h3>
-                <div className="mapContainer">
-                  <Map items={[postDetails]} />
-                </div>
-              </div>
-            </div>
+            <ProfilePostDetailView
+              post={postDetails}
+              isOwner={isOwner}
+              saved={saved}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onContact={handleContact}
+              onSave={handleSave}
+            />
           ) : (
             <>
               {/* ✅ Onglet Accueil */}
@@ -730,151 +571,43 @@ function ProfilePage() {
                     <h2>Bienvenue, {currentUser?.username} ! 👋</h2>
                     <p>Voici un aperçu de votre activité immobilière</p>
                   </div>
-
-                  <div className="statsGrid">
-                    <Suspense fallback={<div className="loading">Chargement des stats...</div>}>
-                      <Await resolve={Promise.all([data.postResponse, data.chatResponse])}>
-                        {([postResponse, chatResponse]) => {
-                          const myPosts = postResponse?.data?.userPosts || [];
-                          const saved = postResponse?.data?.savedPosts || [];
-                          const chats = chatResponse?.data || [];
-                          return (
-                            <>
-                              <div className="statCard">
-                                <div className="statIcon">
-                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </div>
-                                <div className="statContent">
-                                  <div className="statNumber">{myPosts.length}</div>
-                                  <div className="statLabel">Mes Annonces</div>
-                                  <div className="statChange positive">&nbsp;</div>
-                                </div>
-                              </div>
-
-                              <div className="statCard">
-                                <div className="statIcon">
-                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </div>
-                                <div className="statContent">
-                                  <div className="statNumber">{notifNumber}</div>
-                                  <div className="statLabel">Messages non lus</div>
-                                  <div className="statChange positive">&nbsp;</div>
-                                </div>
-                              </div>
-
-                              <div className="statCard">
-                                <div className="statIcon">
-                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 14C19 14.5304 18.7893 15.0391 18.4142 15.4142C18.0391 15.7893 17.5304 16 17 16H7C6.46957 16 5.96086 15.7893 5.58579 15.4142C5.21071 15.0391 5 14.5304 5 14V6C5 5.46957 5.21071 4.96086 5.58579 4.58579C5.96086 4.21071 6.46957 4 7 4H17C17.5304 4 18.0391 4.21071 18.4142 4.58579C18.7893 4.96086 19 5.46957 19 6V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 8H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 12H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </div>
-                                <div className="statContent">
-                                  <div className="statNumber">{saved.length}</div>
-                                  <div className="statLabel">Annonces Sauvées</div>
-                                  <div className="statChange positive">&nbsp;</div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        }}
-                      </Await>
-                    </Suspense>
-                  </div>
-
-                  <div className="recentActivity">
-                    <h3>Activité récente</h3>
-                    <div className="activityList">
-                      <div className="activityItem">
-                        <div className="activityIcon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                        <div className="activityContent">
-                          <div className="activityText">Nouvelle annonce créée</div>
-                          <div className="activityTime">Il y a 2 heures</div>
-                        </div>
-                      </div>
-                      <div className="activityItem">
-                        <div className="activityIcon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                        <div className="activityContent">
-                          <div className="activityText">Nouveau message reçu</div>
-                          <div className="activityTime">Il y a 4 heures</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Suspense fallback={<div className="loading">Chargement des stats...</div>}>
+                    <Await resolve={Promise.all([data.postResponse, data.chatResponse])}>
+                      {([postResponse, chatResponse]) => {
+                        const myPosts = postResponse?.data?.userPosts || [];
+                        const saved = postResponse?.data?.savedPosts || [];
+                        const chats = chatResponse?.data || [];
+                        return (
+                          <ProfileDashboardStats
+                            myPostsCount={myPosts.length}
+                            savedCount={saved.length}
+                            chatsCount={chats.length}
+                            notifNumber={notifNumber}
+                          />
+                        );
+                      }}
+                    </Await>
+                  </Suspense>
                 </div>
               )}
 
               {/* ✅ Mes Maisons Tab */}
               {activeTab === "mes-maisons" && !showCreateForm && (
                 showBlankMes ? null : (
-                  <Suspense fallback={<div className="loading">Chargement...</div>}>
-                    <Await resolve={data.postResponse}>
-                      {(postResponse) => <List posts={postResponse.data.userPosts} onPostClick={handlePostClick} />}
-                    </Await>
-                  </Suspense>
+                  <ProfileMyPosts
+                    postResponsePromise={data.postResponse}
+                    onPostClick={handlePostClick}
+                  />
                 )
               )}
 
               {/* ✅ Maisons Sauvées Tab */}
               {activeTab === "maisons-sauvees" && (
                 showBlankSaved ? null : (
-                  <Suspense fallback={<div className="loading">Chargement...</div>}>
-                    <Await resolve={data.postResponse}>
-                      {(postResponse) => (
-                        <div className="savedPostsContainer">
-                          {postResponse.data.savedPosts && postResponse.data.savedPosts.length > 0 ? (
-                            <div className="list">
-                              {postResponse.data.savedPosts.map((post) => (
-                                <Card key={post.id} item={post} onClick={handlePostClick} />
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="emptyState emptyState--pro">
-                              <div className="emptyIllustration">
-                                <div className="illustrationIcon">
-                                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 14C19 14.5304 18.7893 15.0391 18.4142 15.4142C18.0391 15.7893 17.5304 16 17 16H7C6.46957 16 5.96086 15.7893 5.58579 15.4142C5.21071 15.0391 5 14.5304 5 14V6C5 5.46957 5.21071 4.96086 5.58579 4.58579C5.96086 4.21071 6.46957 4 7 4H17C17.5304 4 18.0391 4.21071 18.4142 4.58579C18.7893 4.96086 19 5.46957 19 6V14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 8H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 12H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </div>
-                                <div className="floatingElements">
-                                  <div className="floatingDot dot1"></div>
-                                  <div className="floatingDot dot2"></div>
-                                  <div className="floatingDot dot3"></div>
-                                </div>
-                              </div>
-                              <div className="emptyContent">
-                                <h2>Aucun favori pour le moment</h2>
-                                <p>Commencez à explorer et sauvegardez vos annonces préférées pour les retrouver facilement ici.</p>
-                                <Link to="/" className="exploreButton">
-                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                  Découvrir les annonces
-                                </Link>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </Await>
-                  </Suspense>
+                  <ProfileSavedPosts
+                    postResponsePromise={data.postResponse}
+                    onPostClick={handlePostClick}
+                  />
                 )
               )}
 

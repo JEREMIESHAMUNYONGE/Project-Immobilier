@@ -6,6 +6,9 @@ import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 import { format } from "timeago.js";
 import ProfileUpdatePage from "../profileUpdatePage/profileUpdatePage.jsx";
+import AdminDashboard from "../../components/admin/AdminDashboard.jsx";
+import UsersTable from "../../components/admin/UsersTable.jsx";
+import DeleteUserModal from "../../components/admin/DeleteUserModal.jsx";
 
 function Admin() {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -444,49 +447,13 @@ function Admin() {
         `}</style>
 
         {activeTab === "accueil" && (
-          <>
-            <div className="adminWelcome">
-              <div className="text">
-                <h2>Tableau de bord</h2>
-                <p>Vue d’ensemble de l’activité de la plateforme</p>
-              </div>
-              <div className="actions">
-                <button className="btn" onClick={handleExportCSV}>Exporter les utilisateurs (CSV)</button>
-                <Link to="/profile" className="btn secondary">Mon profil</Link>
-              </div>
-            </div>
-
-            <div className="adminStats">
-              <div className="statCard">
-                <div className="statIcon">👥</div>
-                <div className="statContent">
-                  <h3>{totalUsers}</h3>
-                  <p>Utilisateurs</p>
-                </div>
-              </div>
-              <div className="statCard">
-                <div className="statIcon">🏠</div>
-                <div className="statContent">
-                  <h3>{totalPosts}</h3>
-                  <p>Annonces</p>
-                </div>
-              </div>
-              <div className="statCard">
-                <div className="statIcon">💬</div>
-                <div className="statContent">
-                  <h3>{totalMessages}</h3>
-                  <p>Messages</p>
-                </div>
-              </div>
-              <div className="statCard">
-                <div className="statIcon">✨</div>
-                <div className="statContent">
-                  <h3>{newUsers7d}</h3>
-                  <p>Nouveaux (7j)</p>
-                </div>
-              </div>
-            </div>
-          </>
+          <AdminDashboard
+            totalUsers={totalUsers}
+            totalPosts={totalPosts}
+            totalMessages={totalMessages}
+            newUsers7d={newUsers7d}
+            onExportCSV={handleExportCSV}
+          />
         )}
 
         {activeTab === "create-owner" && (
@@ -563,97 +530,24 @@ function Admin() {
                 />
               </div>
 
-              <div className="usersTable" id="usersTable">
-                <div className="tableHeader">
-                  <div>Utilisateur</div>
-                  <div>Email</div>
-                  <div>Inscription</div>
-                  <div>Annonces</div>
-                  <div>Favoris</div>
-                  <div>Messages</div>
-                  <div>Actions</div>
-                </div>
-
-                {sortedUsers.length === 0 && (
-                  <div className="tableRow"><div className="muted">Aucun utilisateur trouvé…</div></div>
-                )}
-                {sortedUsers.map((user) => (
-                  <div key={user.id} className="tableRow" title={`ID: ${user.id}`}>
-                    <div className="userCell">
-                      <img
-                        src={user.avatar || "/default-avatar.png"}
-                        alt={user.username}
-                        className="avatar"
-                        style={{ border: '1px solid #e0e0e0', objectFit: 'cover' }}
-                      />
-                      <div>
-                        <div className="name">{user.username}</div>
-                        <span className="role">{user.isAdmin ? 'Admin' : 'Utilisateur'}</span>
-                      </div>
-                    </div>
-                    <div className="muted">{user.email}</div>
-                    <div className="muted">{new Date(user.createdAt).toLocaleDateString("fr-FR")}</div>
-                    <div>{user.postsCount || 0}</div>
-                    <div>{user.savedPostsCount || 0}</div>
-                    <div>{user.messagesCount || 0}</div>
-                    <div className="actions">
-                      <button className="btn view" onClick={() => openViewModal(user)} title="Voir le profil">Voir</button>
-                      <button
-                        className="btn delete"
-                        onClick={() => { setSelectedUser(user); setShowDeleteModal(true); }}
-                        disabled={user.isAdmin}
-                        title={user.isAdmin ? 'Impossible de supprimer un admin' : 'Supprimer cet utilisateur'}
-                      >Supprimer</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <UsersTable
+                users={sortedUsers}
+                onView={openViewModal}
+                onDelete={(user) => { setSelectedUser(user); setShowDeleteModal(true); }}
+              />
             </div>
           </>
         )}
       </div>
 
       {/* Modal de suppression améliorée */}
-      {showDeleteModal && selectedUser && (
-        <div
-          className="deleteModal"
-          onClick={(e) => { if (e.target === e.currentTarget) setShowDeleteModal(false); }}
-          aria-modal="true"
-          role="dialog"
-        >
-          <div className="modalContent">
-            <div className="modalHeader">
-              <h3>
-                <span style={{color:'#9b0000'}}>⚠</span>
-                Confirmer la suppression
-              </h3>
-              <button className="closeButton" onClick={() => setShowDeleteModal(false)} title="Fermer">✕</button>
-            </div>
-            <div className="modalBody">
-              <div className="userMini">
-                <img src={selectedUser.avatar || '/default-avatar.png'} alt={selectedUser.username} />
-                <div>
-                  <div style={{fontWeight:800}}>{selectedUser.username}</div>
-                  <div style={{color:'#666', fontSize:12}}>{selectedUser.email}</div>
-                </div>
-              </div>
-              <p>Cette action supprimera définitivement:</p>
-              <ul>
-                <li>{selectedUser.postsCount || 0} annonces</li>
-                <li>{selectedUser.savedPostsCount || 0} favoris</li>
-                <li>{selectedUser.messagesCount || 0} messages</li>
-              </ul>
-              <div className="warning">Cette action est irréversible.</div>
-            </div>
-            <div className="modalFooter">
-              <button className="cancelButton" onClick={() => setShowDeleteModal(false)} disabled={isDeleting}>Annuler</button>
-              <button className="confirmDeleteButton" onClick={confirmDelete} disabled={isDeleting}>
-                {isDeleting ? 'Suppression…' : 'Supprimer définitivement'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteUserModal
+        open={!!showDeleteModal && !!selectedUser}
+        user={selectedUser}
+        isDeleting={isDeleting}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={confirmDelete}
+      />
 
       {/* Modal de vue détaillée utilisateur (nouveau composant) */}
       <AdminUserDetailModal

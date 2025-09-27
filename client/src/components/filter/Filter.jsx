@@ -27,7 +27,7 @@ function Filter() {
   return (
     <div className="filter">
       <h1>
-        Search results for <b>{searchParams.get("city")}</b>
+      Résultats de recherche pour <b>{searchParams.get("city")}</b>
       </h1>
       <div className="top">
         <div className="item">
@@ -36,7 +36,7 @@ function Filter() {
             type="text"
             id="city"
             name="city"
-            placeholder="City Location"
+            placeholder="Entez votre Commune"
             onChange={handleChange}
             defaultValue={query.city}
           />
@@ -51,9 +51,9 @@ function Filter() {
             onChange={handleChange}
             defaultValue={query.type}
           >
-            <option value="">any</option>
-            <option value="buy">Buy</option>
-            <option value="rent">Rent</option>
+            <option value="">Tout</option>
+            <option value="buy">Acheter</option>
+            <option value="rent">Louer</option>
           </select>
         </div>
         <div className="item">
@@ -64,15 +64,15 @@ function Filter() {
             onChange={handleChange}
             defaultValue={query.property}
           >
-            <option value="">any</option>
+            <option value="">Tout</option>
             <option value="apartment">Apartment</option>
-            <option value="house">House</option>
-            <option value="condo">Condo</option>
-            <option value="land">Land</option>
+            <option value="house">Maison</option>
+            <option value="condo">Copropriété</option>
+            <option value="land">Terrain</option>
           </select>
         </div>
         <div className="item">
-          <label htmlFor="minPrice">Min Price</label>
+          <label htmlFor="minPrice">Prix Minimal</label>
           <input
             type="number"
             id="minPrice"
@@ -83,7 +83,7 @@ function Filter() {
           />
         </div>
         <div className="item">
-          <label htmlFor="maxPrice">Max Price</label>
+          <label htmlFor="maxPrice">Prix Maximal</label>
           <input
             type="text"
             id="maxPrice"
@@ -94,7 +94,7 @@ function Filter() {
           />
         </div>
         <div className="item">
-          <label htmlFor="bedroom">Bedroom</label>
+          <label htmlFor="bedroom">Chambres</label>
           <input
             type="text"
             id="bedroom"
