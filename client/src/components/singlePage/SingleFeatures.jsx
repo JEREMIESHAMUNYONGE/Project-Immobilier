@@ -8,25 +8,25 @@ function SingleFeatures({ utilities, pet, income }) {
         <div className="feature">
           <img src="/utility.png" alt="" />
           <div className="featureText">
-            <span>Utilities</span>
+            <span>Services publics</span>
             {utilities === "owner" ? (
-              <p>Owner is responsible</p>
+              <p>Le propriétaire est responsable</p>
             ) : (
-              <p>Tenant is responsible</p>
+              <p>Le locataire est responsable</p>
             )}
           </div>
         </div>
         <div className="feature">
           <img src="/pet.png" alt="" />
           <div className="featureText">
-            <span>Pet Policy</span>
-            {pet === "allowed" ? <p>Pets Allowed</p> : <p>Pets not Allowed</p>}
+            <span>Politique relative aux animaux domestiques</span>
+            {pet === "allowed" ? <p>Animaux acceptés</p> : <p>Animaux non admis</p>}
           </div>
         </div>
         <div className="feature">
           <img src="/fee.png" alt="" />
           <div className="featureText">
-            <span>Income Policy</span>
+            <span>Politique en matière de revenus</span>
             <p>{income}</p>
           </div>
         </div>

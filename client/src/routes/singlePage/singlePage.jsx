@@ -153,7 +153,7 @@ function SinglePage() {
               <>
                 <button onClick={handleContact}>
                   <img src="/chat.png" alt="" />
-                  Send a Message
+                  Envoie le Message
                 </button>
 
                 <button
@@ -163,7 +163,7 @@ function SinglePage() {
                   }}
                 >
                   <img src="/save.png" alt="" />
-                  {saved ? "Place Saved" : "Save the Place"}
+                  {saved ? "Place Saved" : "Souvegardez"}
                 </button>
               </>
             )}

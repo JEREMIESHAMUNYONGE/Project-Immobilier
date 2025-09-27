@@ -37,7 +37,7 @@ function SearchBar() {
         <input
           type="text"
           name="city"
-          placeholder="City"
+          placeholder="Commune"
           onChange={handleChange}
         />
         <input
@@ -45,7 +45,7 @@ function SearchBar() {
           name="minPrice"
           min={0}
           max={10000000}
-          placeholder="Min Price"
+          placeholder="Prix Minimal"
           onChange={handleChange}
         />
         <input
@@ -53,7 +53,7 @@ function SearchBar() {
           name="maxPrice"
           min={0}
           max={10000000}
-          placeholder="Max Price"
+          placeholder="Prix maximal"
           onChange={handleChange}
         />
         <Link

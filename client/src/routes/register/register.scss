@@ -3,15 +3,15 @@
 .registerPage {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 24px;
-  padding: 24px;
   background: #fafafa;
+  max-width: 900px;
+  width: 100%;
+  margin:  0 auto;
 
   @include md {
     grid-template-columns: 1fr;
-    padding: 16px;
+    padding: 3px;
   }
 
   .card {
@@ -20,9 +20,9 @@
     grid-template-columns: 1fr 1fr;
     background: #fff;
     border: 1px solid #eaeaea;
-    border-radius: 16px;
+    border-radius: 5px;
     overflow: hidden;
-    box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    box-shadow: 0 10px 24px #4269d378;
 
     @include md {
       grid-template-columns: 1fr;
@@ -30,13 +30,13 @@
 
     .cardLeft {
       padding: 24px;
-      background: linear-gradient(180deg, #111 0%, #222 100%);
+      background: #4c75e7f9;;
       color: #fff;
 
       .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
-      .brand img { width: 28px; height: 28px; border-radius: 6px; background: #fff; }
+      .brand img { width: 28px; height: 28px; border-radius: 5px; background: #fff; }
       h1 { margin: 12px 0 8px; font-size: 28px; }
-      p { margin: 0; color: #d1d5db; }
+      p { margin: 0; color: white; }
     }
 
     .cardRight {
@@ -45,28 +45,28 @@
       form { display: grid; gap: 14px; }
 
       .formGroup { display: grid; gap: 6px; }
-      label { font-weight: 700; color: #111; }
+      label { font-weight: 700; color: #4268d3; }
       input {
         padding: 12px 14px;
         border: 1px solid #e4e4e7;
-        border-radius: 10px;
+        border-radius: 5px;
         background: #fff;
         transition: box-shadow .18s ease, border-color .18s ease;
       }
-      input:focus { outline: none; border-color: #111; box-shadow: 0 0 0 3px rgba(17,17,17,.08); }
+      input:focus { outline: none; border-color:#4269d36b; box-shadow: 0 0 0 3px rgba(17,17,17,.08); }
 
       .passwordField { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
-      .togglePassword { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; cursor: pointer; font-weight: 600; }
+      .togglePassword { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 5px; background: #fff; cursor: pointer; font-weight: 600; }
       .togglePassword:hover { background: #f5f5f5; }
 
       .errorAlert { padding: 10px 12px; border: 1px solid #fee2e2; background: #fef2f2; color: #991b1b; border-radius: 10px; }
 
-      .submitButton { padding: 12px 14px; border: 1px solid #111; background: #111; color: #fff; border-radius: 10px; font-weight: 800; cursor: pointer; }
+      .submitButton { padding: 12px 14px; border: 1px solid #4c75e7f9;;; background: #4c75e7f9;;; color: #fff; border-radius: 5px; font-weight: 800; cursor: pointer; }
       .submitButton:disabled { opacity: .7; cursor: not-allowed; }
-      .submitButton:hover { background: #000; }
+      .submitButton:hover { background: #4c75e7f9;; }
 
       .formFooter { display: flex; gap: 8px; align-items: center; color: #666; }
-      .formFooter a { color: #111; font-weight: 700; text-decoration: none; border-bottom: 1px solid #111; }
+      .formFooter a { color: #4c75e7f9;; font-weight: 700; text-decoration: none; border-bottom: 1px solid #111; }
     }
   }
 

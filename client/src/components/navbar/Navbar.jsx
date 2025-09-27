@@ -21,7 +21,7 @@ function Navbar() {
       <div className="left">
         <a href="/" className="logo">
           <img src="/logo.png" alt="" />
-          <span>LamaEstate</span>
+          <span>Loue chez moi</span>
         </a>
         <a href="/">Home</a>
         <a href="/">About</a>
@@ -47,7 +47,7 @@ function Navbar() {
           <>
             <a href="/login">Sign in</a>
             <a href="/register" className="register">
-              Sign up
+             Inscrivez-vous
             </a>
           </>
         )}

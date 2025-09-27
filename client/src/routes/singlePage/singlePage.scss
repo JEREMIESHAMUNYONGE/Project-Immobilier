@@ -214,13 +214,14 @@
           align-items: center;
           gap: 8px;
           padding: 12px 24px;
-          border: 2px solid #fece51;
+          border: 2px solid #4268d3;
           background-color: white;
-          color: #fece51;
+          color: #4268d3;
           cursor: pointer;
           border-radius: 5px;
           font-weight: bold;
           transition: all 0.3s ease;
+          padding-bottom: 20px;
 
           &:hover {
             transform: translateY(-2px);

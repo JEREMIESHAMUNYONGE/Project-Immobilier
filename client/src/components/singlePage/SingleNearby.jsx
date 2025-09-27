@@ -3,29 +3,29 @@ import React from "react";
 function SingleNearby({ school, bus, restaurant }) {
   return (
     <>
-      <p className="title">Nearby Places</p>
+      <p className="title">Lieux à proximité</p>
       <div className="listHorizontal">
         <div className="feature">
           <img src="/school.png" alt="" />
           <div className="featureText">
-            <span>School</span>
+            <span>École</span>
             <p>
-              {school > 999 ? school / 1000 + "km" : school + "m"} away
+              {school > 999 ? school / 1000 + "km" : school + "m"} 
             </p>
           </div>
         </div>
         <div className="feature">
           <img src="/pet.png" alt="" />
           <div className="featureText">
-            <span>Bus Stop</span>
-            <p>{bus}m away</p>
+            <span>Arrêt de bus</span>
+            <p>{bus}m </p>
           </div>
         </div>
         <div className="feature">
           <img src="/fee.png" alt="" />
           <div className="featureText">
             <span>Restaurant</span>
-            <p>{restaurant}m away</p>
+            <p>{restaurant}m </p>
           </div>
         </div>
       </div>

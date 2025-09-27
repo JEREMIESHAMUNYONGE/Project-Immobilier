@@ -38,33 +38,62 @@ function Login() {
     }
   };
   return (
-    <div className="login">
-      <div className="formContainer">
-        <form onSubmit={handleSubmit}>
-          <h1>Welcome back</h1>
-          <input
-            name="username"
-            required
-            minLength={3}
-            maxLength={20}
-            type="text"
-            placeholder="Nom d'utilisateur ou email"
-          />
-          <input
-            name="password"
-            type="password"
-            required
-            placeholder="Password"
-          />
-          <button disabled={isLoading}>Login</button>
-          {error && <span>{error}</span>}
-          <Link to="/register">{"Don't"} you have an account?</Link>
-        </form>
-      </div>
-      <div className="imgContainer">
-        <img src="/bg.png" alt="" />
+    <>
+     <div className="registerPage">
+      <div className="card">
+        <div className="cardLeft">
+          <div className="brand">
+            <img src="/logo.png" alt="Logo" />
+            <span>Loue chez moi</span>
+          </div>
+          <h1>Connectez-vous</h1>
+          <p>Rejoignez la communauté pour trouver et publier des annonces.</p>
+        </div>
+        <div className="cardRight">
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="formGroup">
+              <label htmlFor="username">Nom d'utilisateur</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Ex: johndoe"
+                autoComplete="username"
+                required
+                minLength={3}
+                maxLength={20}
+              />
+            </div>
+          
+            <div className="formGroup">
+              <label htmlFor="password">Mot de passe</label>
+              <div className="passwordField">
+                <input
+                name="password"
+                 type="password"
+                 required
+                  id="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  minLength={6}
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="submitButton" disabled={isLoading}>
+              {isLoading ? "Connexion…" : "Connexion"}
+            </button>
+
+            <div className="formFooter">
+              <span>vous êtes nouveau ?</span>
+              <Link to="/register">Creer un nouveau compt</Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
+    </>
+   
   );
 }
 

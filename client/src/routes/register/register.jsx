@@ -114,9 +114,6 @@ function Register() {
           </form>
         </div>
       </div>
-      <div className="heroImage">
-        <img src="/bg.png" alt="Illustration" />
-      </div>
     </div>
   );
 }

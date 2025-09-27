@@ -3,19 +3,19 @@ import React from "react";
 function SingleSizes({ size, bedroom, bathroom }) {
   return (
     <>
-      <p className="title">Sizes</p>
+      <p className="title">Tailles</p>
       <div className="sizes">
         <div className="size">
           <img src="/size.png" alt="" />
-          <span>{size} sqft</span>
+          <span>{size} m²</span>
         </div>
         <div className="size">
           <img src="/bed.png" alt="" />
-          <span>{bedroom} beds</span>
+          <span>{bedroom} lits</span>
         </div>
         <div className="size">
           <img src="/bath.png" alt="" />
-          <span>{bathroom} bathroom</span>
+          <span>{bathroom} salle de bain</span>
         </div>
       </div>
     </>
