@@ -22,7 +22,7 @@
     gap: 8px;
     padding: 12px 16px;
     border: 1px solid #e5e7eb !important;
-    border-radius: 10px !important;
+    border-radius: 5px !important;
     background: #ffffff !important;
     color: #111827 !important;
     font-weight: 600 !important;
@@ -39,7 +39,7 @@
       justify-content: center;
       width: 18px;
       height: 18px;
-      border-radius: 6px;
+      border-radius: 5px;
       background: #111827;
       color: #fff;
       font-size: 14px;
@@ -57,7 +57,7 @@
     max-height: 92vh;
     background: #fff;
     border: 1px solid #eaeaea;
-    border-radius: 14px;
+    border-radius: 5px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     overflow: hidden;
     display: flex;
@@ -72,7 +72,7 @@
     height: 36px;
     border: 1px solid #eaeaea;
     background: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     display: grid;
     place-items: center;
@@ -141,7 +141,7 @@
 
     input, select {
       border: 1px solid #e5e7eb;
-      border-radius: 10px;
+      border-radius: 5px;
       padding: 12px 12px;
       font-size: 14px;
       outline: none;
@@ -155,7 +155,7 @@
 
     &.description {
       .ql-container {
-        border-radius: 10px;
+        border-radius: 5px;
       }
       // add extra space after description block
       margin-bottom: 24px;

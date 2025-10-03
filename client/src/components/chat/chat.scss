@@ -123,7 +123,7 @@
         height: 32px;
         background: #f5f5f5;
         border: 1px solid #eaeaea;
-        border-radius: 8px;
+        border-radius: 5px;
         color: #666666;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -164,7 +164,7 @@
           background: #f5f5f5;
           color: #111827;
           padding: 10px 12px;
-          border-radius: 12px;
+          border-radius: 5px;
           border: 1px solid #eaeaea;
           line-height: 1.4;
           word-break: break-word;
@@ -175,7 +175,7 @@
           color: #6b7280;
           background: #fafafa;
           padding: 2px 6px;
-          border-radius: 6px;
+          border-radius: 5px;
           border: 1px solid #eaeaea;
           width: fit-content;
         }
@@ -194,7 +194,7 @@
         flex: 1;
         height: 100%;
         border: 1px solid #eaeaea;
-        border-radius: 8px;
+        border-radius: 5px;
         padding: 12px;
         resize: none;
         font-size: 14px;
@@ -214,7 +214,7 @@
         background: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 8px;
+        border-radius: 5px;
         font-weight: 600;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

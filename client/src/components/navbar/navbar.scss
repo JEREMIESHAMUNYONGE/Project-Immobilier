@@ -68,8 +68,8 @@ nav {
       }
 
       .logoIcon {
-        width: 36px;
-        height: 36px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -87,6 +87,7 @@ nav {
           width: 24px;
           height: 24px;
           transition: transform 0.3s ease;
+          
         }
       }
 
@@ -155,17 +156,17 @@ nav {
       font-weight: 500;
 
       img {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
+        width: 50px;
+        height: 50px;
         object-fit: cover;
         margin-right: 16px;
         border: 3px solid #eaeaea;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
 
         &:hover {
-          border-color: #000000;
+          border-color: #0000007b;
           transform: scale(1.1) rotate(5deg);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
@@ -186,11 +187,11 @@ nav {
         color: #ffffff;
         cursor: pointer;
         border: none;
-        border-radius: 12px;
+        border-radius: 5px;
         position: relative;
         font-weight: 600;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 16px #4c75e785;
         overflow: hidden;
 
         &::before {
@@ -216,8 +217,8 @@ nav {
 
         .notification {
           position: absolute;
-          top: -8px;
-          right: -8px;
+          top: -10px;
+          right: -20px;
           background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
           color: white;
           border-radius: 50%;
@@ -245,6 +246,7 @@ nav {
         background: #4c75e7f9;;
         transform: translateY(-2px);
         box-shadow: 0 8px 24px #4c75e7f9;
+        color: white;
       }
     }
 
@@ -257,6 +259,7 @@ nav {
         height: 32px;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 
         &:hover {
           transform: scale(1.1) rotate(90deg);
@@ -320,7 +323,7 @@ nav.home {
       background: #4268d3;
     }
     &:hover {
-      color:white; /* slate-900 */
+      color: #334155; /* slate-900 */
     }
   }
 

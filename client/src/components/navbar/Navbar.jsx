@@ -20,7 +20,7 @@ function Navbar() {
     <nav className={isHome ? "home" : ""}>
       <div className="left">
         <a href="/" className="logo">
-          <img src="/logo.png" alt="" />
+          <img src="/logo.png" alt="" className="w-[30px] has-[40px]" />
           <span>Loue chez moi</span>
         </a>
         <a href="/">Home</a>

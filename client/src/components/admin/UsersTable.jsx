@@ -22,7 +22,7 @@ function UsersTable({ users, onView, onDelete }) {
         <div key={user.id} className="tableRow" title={`ID: ${user.id}`}>
           <div className="userCell">
             <img
-              src={user.avatar || "/default-avatar.png"}
+              src={user.avatar || "noavatar.jpg"}
               alt={user.username}
               className="avatar"
               style={{ border: '1px solid #e0e0e0', objectFit: 'cover' }}
