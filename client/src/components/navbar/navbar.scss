@@ -1,49 +1,23 @@
 @import "../../responsive.scss";
 
 nav {
-  height: 80px;
+  height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid #eaeaea;
-  padding: 0 32px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: all 0.3s ease;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
 
   a {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
-    color: #666666;
-    font-weight: 500;
-    position: relative;
+    transition: all 0.4s ease;
 
     @include sm {
       display: none;
     }
 
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: #4c75e7f9;
-      transition: width 0.3s ease;
-    }
-
     &:hover {
-      color: #000000;
-      transform: translateY(-1px);
-
-      &::after {
-        width: 100%;
-      }
+      scale: 1.05;
     }
   }
 
@@ -54,41 +28,14 @@ nav {
     gap: 50px;
 
     .logo {
-      font-weight: 800;
-      font-size: 22px;
+      font-weight: bold;
+      font-size: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      color: #000000;
-      text-decoration: none;
-      transition: all 0.3s ease;
+      gap: 10px;
 
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      .logoIcon {
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f5f5f5 0%, #eaeaea 100%);
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-        &:hover {
-          background: linear-gradient(135deg, #eaeaea 0%, #d4d4d4 100%);
-          transform: rotate(5deg);
-        }
-
-        img {
-          width: 24px;
-          height: 24px;
-          transition: transform 0.3s ease;
-          
-        }
+      img {
+        width: 28px;
       }
 
       span {
@@ -102,74 +49,35 @@ nav {
       }
     }
   }
-
   .right {
     flex: 2;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-    height: 100%;
-    padding: 0 32px;
-    border-radius: 0 0 0 20px;
+    background-color: #fcf5f3;
 
     @include md {
-      background: transparent;
-      padding: 0;
+      background-color: transparent;
     }
 
     a {
-      padding: 12px 20px;
-      margin: 0 8px;
-      border-radius: 5px;
-      font-weight: 500;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
-        transition: left 0.5s ease;
-      }
-
-      &:hover::before {
-        left: 100%;
-      }
-
-      &:hover {
-        background: #f0f0f0;
-        color: #000000;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
+      // Taille des liens non-boutons
+      padding: 12px 20px; // Ajusté pour être moins grand (ancien: 12px 24px)
+      margin: 0 8px; // Marge entre les liens ajustée
+      border-radius: 5px; // Ajout d'un léger bord arrondi
     }
 
     .user {
       display: flex;
       align-items: center;
-      font-weight: 500;
+      font-weight: 500; // Poids de police ajusté pour être cohérent avec l'original
 
       img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        margin-right: 16px;
-        border: 3px solid #eaeaea;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 40px; // Taille de l'avatar augmentée pour le style original
+        height: 40px;
         border-radius: 50%;
-
-        &:hover {
-          border-color: #0000007b;
-          transform: scale(1.1) rotate(5deg);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
+        object-fit: cover;
+        margin-right: 16px; // Marge ajustée
       }
 
       span {
@@ -179,75 +87,42 @@ nav {
       }
 
       .profile {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 14px 24px;
-        background: #4c75e7f9;
-        color: #ffffff;
+        // STYLE DU BOUTON PRINCIPAL (PROFILE)
+        padding: 10px 18px; // CORRECTION: Taille de bouton cohérente avec l'original
+        background: #4c75e7f9; // CORRECTION: Couleur Bleu
+        color: #ffffff; // Couleur du texte blanc
         cursor: pointer;
         border: none;
-        border-radius: 5px;
+        border-radius: 5px; // Ajout d'un bord arrondi
         position: relative;
-        font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 16px #4c75e785;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s ease;
-        }
-
-        &:hover::before {
-          left: 100%;
-        }
-
-        &:hover {
-          background: linear-gradient(135deg, #333333 0%, #555555 100%);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
+        font-weight: 600; // Poids de police ajusté pour le bouton
 
         .notification {
           position: absolute;
-          top: -10px;
-          right: -20px;
-          background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+          top: -8px;
+          right: -8px;
+          background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%); // Gradient rouge
           color: white;
           border-radius: 50%;
-          width: 26px;
-          height: 26px;
+          width: 24px; // Taille ajustée pour être moins intrusive
+          height: 24px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 12px;
           font-weight: 700;
-          box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
-          animation: pulse 2s infinite;
+          z-index: 2000;
         }
       }
     }
 
     .register {
-      background: #4c75e7f9;;
-      color: #ffffff;
-      border-radius: 5px;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover {
-        background: #4c75e7f9;;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px #4c75e7f9;
-        color: white;
-      }
+      // STYLE DU BOUTON REGISTER
+      background: #4c75e7f9; // CORRECTION: Couleur Bleu
+      color: #ffffff; // Couleur du texte blanc
+      border-radius: 5px; // Ajout d'un bord arrondi
+      font-weight: 600; // Poids de police ajusté pour le bouton
+      padding: 12px 20px; // Taille de bouton cohérente avec l'original
     }
 
     .menuIcon {
@@ -255,15 +130,9 @@ nav {
       z-index: 999;
 
       img {
-        width: 32px;
-        height: 32px;
+        width: 30px; // Taille ajustée pour un look "normal"
+        height: 30px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-
-        &:hover {
-          transform: scale(1.1) rotate(90deg);
-        }
       }
 
       @include sm {
@@ -275,18 +144,16 @@ nav {
       position: absolute;
       top: 0;
       right: -50%;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(51, 51, 51, 0.95) 100%);
-      backdrop-filter: blur(20px);
+      background-color: black;
       color: white;
       height: 100vh;
       width: 50%;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 1s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      z-index: 998;
+      font-size: 24px;
 
       &.active {
         right: 0;
@@ -295,74 +162,8 @@ nav {
       @include sm {
         a {
           display: initial;
-          padding: 16px 24px;
-          border-radius: 5px;
-          margin: 8px 0;
-          transition: all 0.3s ease;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(8px);
-          }
         }
       }
     }
-  }
-}
-
-/* Variante spéciale pour la page d’accueil */
-nav.home {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  border-bottom: none;
-  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.08);
-
-  a {
-    color: #334155; /* slate-700 */
-    &::after {
-      background: #4268d3;
-    }
-    &:hover {
-      color: #334155; /* slate-900 */
-    }
-  }
-
-  .right {
-    background: transparent;
-    border-radius: 0;
-  }
-
-  .register {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    box-shadow: 0 6px 18px #4268d3;
-    &:hover {
-      background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
-      box-shadow: 0 10px 26px #4268d3;
-    }
-  }
-
-  .user {
-    .profile {
-      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.25);
-      &:hover {
-        background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
-        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
-      }
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
   }
 }
