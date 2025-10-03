@@ -504,6 +504,7 @@ function Admin() {
                 <button type="button" className="btn secondary" onClick={()=>{ setNewUsername(''); setNewEmail(''); setNewPassword(''); }}>Réinitialiser</button>
               </div>
             </form>
+            
           </div>
         )}
 

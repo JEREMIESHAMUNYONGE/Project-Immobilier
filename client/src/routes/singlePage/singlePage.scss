@@ -34,6 +34,11 @@
         padding-right: 0px;
       }
 
+      // ➡️ CHANGEMENT 1 : Ajout du padding gauche/droite pour les petits écrans
+      @include sm {
+        padding: 0 15px; /* 15px de chaque côté sur le téléphone */
+      }
+
       .info {
         margin-top: 50px;
 
@@ -131,6 +136,11 @@
 
       @include md {
         padding: 20px;
+      }
+
+      // ➡️ CHANGEMENT 2 : Ajout du padding gauche/droite pour les petits écrans
+      @include sm {
+        padding: 20px 15px; /* Conserve le padding vertical de 20px existant et ajoute 15px horizontal */
       }
 
       img {
