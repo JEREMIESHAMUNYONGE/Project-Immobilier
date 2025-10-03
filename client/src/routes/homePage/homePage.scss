@@ -1,62 +1,294 @@
 @import "../../responsive.scss";
 
+// Définition des variables de style centralisées pour l'accessibilité et la cohérence
+$primary-brand: #2563eb; // Un bleu plus vif (blue-700) pour un impact moderne
+$secondary-bg: #f5f8ff; // Arrière-plan subtil
+$text-headline: #0f172a; // Gris très foncé (slate-900) pour un contraste optimal
+$text-body: #475569;     // Gris moyen (slate-600) pour la lisibilité
+$transition-fast: 0.25s ease-out;
+$border-color: #e2e8f0;
+
 .homePage {
-  display: flex;
-  height: 100%;
+  // Fixation de la hauteur minimale pour un "Hero Section" qui remplit l'écran
+  min-height: calc(100vh - 80px);
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  padding: 60px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; 
+
+  @include md {
+    flex-direction: column;
+    min-height: auto; 
+    padding: 30px 20px;
+  }
 
   .textContainer {
     flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 100px 0 0;
+
+    @include lg {
+      padding-right: 50px;
+    }
+
+    @include md {
+      padding: 0;
+      flex: none;
+      order: 2;
+    }
 
     .wrapper {
-      padding-right: 100px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 50px;
-      height: 100%;
-
-      @include lg{
-        padding-right: 50px;
-      }
-
-      @include md{
-        padding: 0;
-      }
-
-      @include sm{
-        justify-content: flex-start;
+      gap: 50px; 
+      
+      @include sm {
+        gap: 35px;
+        padding-top: 30px;
       }
 
       .title {
-        font-size: 64px;
+        font-size: 80px; 
+        font-weight: 900; 
+        color: $text-headline;
+        line-height: 1;
+        letter-spacing: -2px; 
+
+        span {
+          color: $primary-brand;
+          text-shadow: 1px 1px 3px rgba(37, 99, 235, 0.2); 
+        }
 
         @include lg {
-          font-size: 48px;
+          font-size: 64px;
+        }
+
+        @include md {
+          font-size: 56px;
+        }
+
+        @include sm {
+          font-size: 44px;
+          letter-spacing: -1px;
+        }
+      }
+
+      p {
+        font-size: 20px; 
+        color: $text-body;
+        line-height: 1.7;
+        font-weight: 400; 
+        max-width: 700px;
+        margin-bottom: -30px; 
+        
+        @include sm {
+          margin-bottom: -15px;
+        }
+      }
+
+      .searchBar {
+        display: flex;
+        flex-direction: column; 
+        background: white;
+        border: 1px solid $border-color;
+        border-radius: 5px; // CHANGEMENT: Applique le border-radius de 5px ici
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05); 
+        transition: border-color $transition-fast, box-shadow $transition-fast;
+
+        &:focus-within {
+          border-color: $primary-brand;
+        }
+
+        .type {
+            display: flex;
+            background: $secondary-bg;
+            
+            button {
+                flex: 1;
+                padding: 12px 20px;
+                border: none;
+                cursor: pointer;
+                background: transparent;
+                text-transform: uppercase;
+                font-weight: 600;
+                font-size: 15px;
+                color: $text-body;
+                transition: all $transition-fast;
+                border-right: 1px solid $border-color;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &:hover {
+                    color: $primary-brand;
+                    background-color: lighten($primary-brand, 45%);
+                }
+
+                &.active {
+                    color: white;
+                    background-color: $primary-brand;
+                    border-color: $primary-brand;
+                    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+                    
+                    &:hover {
+                        background-color: darken($primary-brand, 5%);
+                        color: white;
+                    }
+                }
+                
+                @include sm {
+                    padding: 10px 15px;
+                }
+            }
+        }
+
+        form {
+          border: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 70px;
+          gap: 0;
+          background: white;
+          width: 100%;
+
+          @include sm {
+            flex-direction: column;
+            height: auto;
+            padding: 15px 0;
+          }
+
+          input {
+            border: none;
+            border-right: 1px solid $border-color; 
+            padding: 0 20px;
+            height: 100%;
+            font-size: 17px;
+            color: $text-headline;
+
+            &:first-child { 
+                flex-grow: 2;
+            }
+            &:nth-child(2),
+            &:nth-child(3) {
+                flex-grow: 1; 
+            }
+
+            &:focus {
+              outline: none;
+              background: lighten($secondary-bg, 3%);
+            }
+            
+            @include sm {
+              flex-grow: 1 !important; 
+              border-right: none;
+              padding: 15px 20px;
+              margin: 8px auto;
+              border: 1px solid $border-color;
+            }
+          }
+          
+          input:nth-last-child(2) { 
+            border-right: none;
+          }
+
+          button {
+            background-color: $primary-brand;
+            border: none;
+            width: 80px; 
+            height: 100%;
+            cursor: pointer;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all $transition-fast;
+            padding: 0; 
+
+            &:hover {
+              background-color: darken($primary-brand, 10%);
+              transform: scale(1.01);
+            }
+            
+            // Masque le texte sur desktop, affichage de l'icône seule
+            span {
+                display: none; 
+            }
+            
+            img {
+              width: 26px; 
+              height: 26px;
+              display: block; // Assure que l'icône est visible par défaut (desktop)
+            }
+
+            @include sm {
+              width: 90%;
+              height: 55px;
+              margin: 10px auto;
+              border-radius: 8px;
+              
+              // Affiche le texte sur mobile
+              span {
+                display: block; 
+              }
+              // MASQUE L'ICÔNE SUR MOBILE (CHANGEMENT DEMANDÉ)
+              img {
+                display: none; 
+              }
+            }
+          }
         }
       }
 
       .boxes {
         display: flex;
         justify-content: space-between;
+        gap: 30px;
+        margin-top: 60px;
+        
+        & > div {
+            padding: 10px 0;
+            transition: transform $transition-fast, box-shadow $transition-fast;
+            border-radius: 10px;
+
+            &:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2); 
+            }
+        }
 
         @include sm {
-          display: none;
+          flex-wrap: wrap; 
+          justify-content: space-around;
+          margin-top: 40px;
+          gap: 20px;
         }
 
         h1 {
-          font-size: 36px;
+          font-size: 44px;
+          color: $primary-brand;
+          font-weight: 800;
+          line-height: 1.1;
 
           @include lg {
-            font-size: 32px;
+            font-size: 38px;
           }
         }
 
         h2 {
-          font-size: 20px;
-          font-weight: 300;
+          font-size: 18px;
+          font-weight: 500;
+          color: $text-body;
+          margin-top: 5px;
         }
       }
     }
@@ -64,23 +296,38 @@
 
   .imgContainer {
     flex: 2;
-    background-color: #fcf5f3;
+    background-color: $secondary-bg;
     position: relative;
     display: flex;
     align-items: center;
-    padding-top: 30px;
+    justify-content: center;
+    height: 100%;
+    overflow: hidden;
 
     @include md {
-      display: none;
+      height: 400px;
+      flex: none;
+      width: 100%;
+      order: 1;
+      border-radius: 0 0 25px 25px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     img {
-      width: 115%;
-      position: absolute;
-      right: 0;
+      width: 100%; 
+      height: 100%;
+      object-fit: contain;
+      position: relative;
+      transform: scale(1.05);
 
       @include lg {
-        width: 105%;
+        transform: scale(1.02);
+      }
+
+      @include md {
+        width: 90%;
+        position: static;
+        transform: none;
       }
     }
   }

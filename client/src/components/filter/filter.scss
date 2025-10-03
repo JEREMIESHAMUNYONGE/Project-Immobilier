@@ -1,55 +1,153 @@
+@import "../../responsive.scss";
+
+// Variables de style
+$primary-brand: #0f4c81; 
+$secondary-brand: #1e88e5; 
+$text-headline: #121212; 
+$text-label: #5a626d;    
+$input-bg: #ffffff;
+$border-color: #e0e0e0;
+$transition-speed: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
 .filter {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 20px;
+  gap: 20px;
+  // Padding vertical par défaut
+  padding: 20px 0; 
+  
+  // NOUVEAU : Padding horizontal pour le mobile
+  @include sm {
+      padding: 20px 15px; /* 15px de chaque côté sur le téléphone */
+  }
 
   h1 {
-    font-weight: 300;
-    font-size: 24px;
+    font-weight: 700;
+    font-size: 26px;
+    color: $text-headline;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 10px;
+    margin-bottom: 0; 
+    
+    @include sm {
+        font-size: 22px;
+    }
   }
 
   .item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 
     label {
-      font-size: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: $text-label;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     input,
     select {
-      width: 100px;
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-  }
-
-  .top {
-    input {
       width: 100%;
+      padding: 10px 12px;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      font-size: 14px;
+      color: $text-headline;
+      background-color: $input-bg;
+      transition: all $transition-speed;
+      
+      &:focus {
+        outline: none;
+        border-color: $secondary-brand;
+        box-shadow: 0 0 0 2px rgba($secondary-brand, 0.15);
+      }
+    }
+    
+    &.location-search {
+        input {
+            font-size: 15px;
+            font-weight: 500;
+            padding: 12px 14px;
+        }
     }
   }
 
   .bottom {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-wrap: wrap; 
+    gap: 15px 15px;
+    justify-content: flex-start;
+
+    .item {
+        // Desktop : 4 colonnes
+        flex: 1 1 calc(25% - 12px);
+        min-width: 100px;
+
+        @include lg {
+            // Grand écran : 3 colonnes
+            flex: 1 1 calc(33.33% - 10px);
+        }
+
+        @include md {
+            // Tablette : 2 colonnes
+            flex: 1 1 calc(50% - 7.5px); 
+        }
+
+        // Mobile : 2 colonnes
+        @include sm {
+            flex: 1 1 calc(50% - 7.5px); 
+        }
+    }
 
     button {
-      width: 100px;
-      padding: 10px;
+      width: 100%; 
+      max-width: 150px;
+      height: 40px;
       border: none;
       cursor: pointer;
-      background-color: #4268d3;
+      background-color: $secondary-brand;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 6px; 
+      transition: all $transition-speed;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      margin-left: auto; 
+      margin-top: 10px; 
+      
+      &:hover {
+        background-color: darken($secondary-brand, 8%);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba($secondary-brand, 0.2);
+      }
 
       img {
-        width: 24px;
-        height: 24px;
+        width: 18px;
+        height: 18px;
+        filter: brightness(0) invert(1);
+        margin-right: 6px;
+      }
+      
+      @include sm {
+        width: 100%; 
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 15px;
+        height: 45px;
+        font-size: 16px;
+        
+        flex: 1 1 100%; /* Le bouton reste sur une seule colonne */
+        
+        &:hover {
+            box-shadow: none;
+            transform: none;
+        }
       }
     }
   }

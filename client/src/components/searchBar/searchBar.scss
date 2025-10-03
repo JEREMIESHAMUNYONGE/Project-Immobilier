@@ -1,73 +1,73 @@
 @import "../../responsive.scss";
 
+// Définition des variables pour un style cohérent et moderne
+$primary-blue: #3B82F6; // Nouveau bleu de marque
+$light-gray-bg: #F9FAFB;
+$border-color: #E5E7EB;
+$text-default: #374151;
+$text-subtle: #9CA3AF;
+$transition-speed: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 .searchBar {
   background: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 5px;
-  box-shadow: 0 4px 20px #4268d3;
+  border: 1px solid $border-color; // Bordure plus subtile
+  border-radius: 8px; // Arrondis modernes (légèrement moins que 12px, plus que 5px)
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); // Ombre plus douce
   overflow: hidden;
   margin: 32px 0;
-  transition: all 0.3s ease;
+  transition: all $transition-speed;
   position: relative;
 
   &:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
+    border-color: lighten($primary-blue, 20%);
   }
-
+  
+  // Amélioration de la sélection des types (Rent/Buy)
   .type {
     display: flex;
-    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-    border-bottom: 1px solid #eaeaea;
+    background: $light-gray-bg;
+    border-bottom: 1px solid $border-color;
 
     button {
       flex: 1;
-      padding: 18px 24px;
+      padding: 14px 24px; // Padding ajusté
       border: none;
       cursor: pointer;
       background: transparent;
-      text-transform: capitalize;
-      font-weight: 500;
-      color: #666666;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase; // Changement : majuscules pour look pro
+      font-weight: 700;
+      font-size: 14px;
+      color: $text-subtle;
+      transition: all $transition-speed;
       position: relative;
-      overflow: hidden;
 
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #4268d3;
-        transform: scaleY(0);
-        transition: transform 0.3s ease;
-        z-index: -1;
-      }
-
+      // État actif/sélectionné
       &.active {
-        color: #ffffff;
-        font-weight: 600;
-        background:#4268d3;
-
-        &::before {
-          transform: scaleY(1);
-        }
+        color: $primary-blue;
+        background: #ffffff; // Le bouton actif est blanc
+        // Ligne bleue sous le bouton actif pour un effet visuel moderne
+        box-shadow: inset 0 -3px 0 $primary-blue; 
       }
 
       &:not(.active):hover {
-        
-        color:white;
-        transform: translateY(-1px);
+        color: $text-default;
+        background: darken($light-gray-bg, 3%);
+        transform: none; // Pas de décalage au survol
       }
-
+      
+      // Assure que l'arrondi du haut s'applique correctement
       &:first-child {
-        border-top-left-radius: 5px;
+        border-top-left-radius: 8px; 
       }
-
       &:last-child {
-        border-top-right-radius: 5px;
+        border-top-right-radius: 8px;
+      }
+      
+      // Suppression de l'effet ::before complexe
+      &::before {
+        display: none;
       }
     }
   }
@@ -76,10 +76,10 @@
     border: none;
     display: flex;
     justify-content: space-between;
-    height: 80px;
+    align-items: center; // Centrage vertical
+    height: 65px; // Hauteur plus compacte
     gap: 0;
     background: #ffffff;
-    position: relative;
 
     @include sm {
       flex-direction: column;
@@ -87,104 +87,83 @@
     }
 
     input {
-      border: none;
-      padding: 0 24px;
-      width: 200px;
+      // Inputs sont séparés par une bordure verticale
+      border-right: 1px solid $border-color;
+      border-left: none; // S'assure qu'il n'y a pas de bordure gauche
+      
+      padding: 0 20px;
+      height: 100%;
       background: transparent;
+      flex-grow: 1;
       font-size: 16px;
-      color: #4268d3;
-      transition: all 0.3s ease;
-      position: relative;
+      color: $text-default;
+      transition: all $transition-speed;
 
       &:focus {
         outline: none;
-        background: #fafafa;
-        transform: scale(1.02);
+        background: $light-gray-bg;
+        transform: none; // Suppression du scale(1.02)
       }
 
       &::placeholder {
-        color:#4268d3;
+        color: $text-subtle;
         font-weight: 400;
-        transition: color 0.3s ease;
       }
-
-      &:focus::placeholder {
-        color: #666666;
+      
+      // Pas de bordure pour l'input juste avant le bouton de recherche (le lien <a>)
+      &:nth-last-child(2) {
+        border-right: none;
       }
+      
+      // Correction des largeurs (si les inputs sont dans l'ordre: Location, MinPrice, MaxPrice)
+      // Ceci est un exemple, ajustez les flex-grow selon vos 3 inputs
+      &:first-child { flex-grow: 2; } 
+      &:nth-child(2) { flex-grow: 1; }
+      &:nth-child(3) { flex-grow: 1; border-right: none; } 
 
-      @include lg {
-        padding: 0 20px;
-        width: 180px;
-
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: 140px;
-        }
-      }
-
-      @include md {
-        width: 160px;
-
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: 120px;
-        }
-      }
 
       @include sm {
         width: 100%;
-        padding: 20px 24px;
-        border: 2px solid #eaeaea;
-        border-radius: 12px;
+        padding: 15px 24px;
+        border: 1px solid $border-color; // Bordure simple sur mobile
+        border-radius: 8px;
         margin: 8px 16px;
-        background: #ffffff;
-
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: 100%;
-        }
+        flex-grow: 1 !important; // Réinitialise le flex-grow sur mobile
 
         &:focus {
-          border-color: #4268d3;
+          border-color: $primary-blue;
+          box-shadow: 0 0 0 2px rgba($primary-blue, 0.3);
           background: #ffffff;
-          box-shadow: 0 0 0 3px #4268d3;
         }
       }
     }
 
+    // Bouton de recherche (le lien <a>)
     a {
-      flex: 1;
-      background: #4268d3;
+      // Devient un bouton compact
+      width: 120px; 
+      height: 100%;
+      background: $primary-blue;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
-      position: relative;
+      transition: background-color $transition-speed;
       overflow: hidden;
 
+      // Suppression de l'effet d'éclairage ::before
       &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, #4268d3, transparent);
-        transition: left 0.5s ease;
-      }
-
-      &:hover::before {
-        left: 100%;
+        display: none;
       }
 
       &:hover {
-        background: #4268d3;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px #4268d3;
+        background: darken($primary-blue, 8%);
+        transform: none;
+        box-shadow: none;
       }
 
       button {
+        // Le bouton à l'intérieur du lien est maintenant un simple conteneur de contenu
         border: none;
         cursor: pointer;
         background: transparent;
@@ -194,21 +173,28 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        transition: all 0.3s ease;
-
-        @include sm {
-          padding: 16px;
-        }
+        padding: 0; // Padding géré par le <a> parent
 
         img {
           width: 20px;
           height: 20px;
-          transition: all 0.3s ease;
+          transition: none;
         }
 
         &:hover img {
-          transform: scale(1.1) rotate(5deg);
+          transform: none;
         }
+        
+        @include sm {
+          padding: 16px;
+        }
+      }
+      
+      @include sm {
+        width: 90%;
+        height: 50px;
+        margin: 10px auto;
+        border-radius: 8px;
       }
     }
   }
